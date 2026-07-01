@@ -1,0 +1,14 @@
+.DS_Store
+.git/
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+output/
