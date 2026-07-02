@@ -1,8 +1,8 @@
-# ITRA Rating Builder 🏃‍♂️🏔🕵️‍♂️
+# Trail Rating Builder
 
-Build a ranked participant report from a RaceResult event page using ITRA Performance Index data from ITRA's "Find a Runner" page.
+Build a ranked participant report from a participant source page using an external trail-running rating provider.
 
-The default output is Markdown because it matches the existing human-readable report style in `output/results.md`. CSV and JSON are also available for spreadsheets or later processing.
+The project is structured for multiple participant sources and multiple rating providers. Currently, only the RaceResult source and ITRA provider are implemented. UTMB Index support is planned but not implemented yet. The default output is Markdown because it matches the existing human-readable report style in `output/results.md`. CSV and JSON are also available for spreadsheets or later processing.
 
 <p align="center">
   <img src="./avatar.jpg" alt="Bot Avatar" width="512">
@@ -22,17 +22,19 @@ pip install -r requirements.txt
 Optional local `.env` defaults are supported via `python-dotenv`:
 
 ```bash
-PARTICIPANTS_LIST_URL=https://my.raceresult.com/407493/
+PARTICIPANTS_SOURCE=raceresult
+PARTICIPANTS_SOURCE_URL=https://my.raceresult.com/123456/
+RATING_PROVIDER=itra
 CONTEST=ULTRA 70
 GENDER=male
 # Check only the first N filtered table rows. Leave empty to check all.
-PARTICIPANTS_LIST_FIRST=
+PARTICIPANTS_SOURCE_FIRST=
 # Leave empty to include every filtered participant. Set to 20 for a top-20 report.
-ITRA_RATING_LIMIT=
+RATING_OUTPUT_LIMIT=
 OUTPUT_FORMAT=md
 OUTPUT_PATH=output/results.md
 ITRA_REQUEST_DELAY=0.35
-ITRA_REQUEST_INSECURE=false
+RATING_REQUEST_INSECURE=false
 ```
 
 Clean local dependencies and rebuild the environment from scratch:
@@ -51,7 +53,9 @@ python -m pip check
 
 ```bash
 source .venv/bin/activate
-python itra_rating_builder.py 'https://my.raceresult.com/407493/' \
+PYTHONPATH=src python -m trail_rating_builder.cli 'https://my.raceresult.com/123456/' \
+  --source raceresult \
+  --provider itra \
   --contest 'ULTRA 70' \
   --gender male \
   --first 20 \
@@ -62,12 +66,14 @@ With `.env` configured, this is enough:
 
 ```bash
 source .venv/bin/activate
-python itra_rating_builder.py
+PYTHONPATH=src python -m trail_rating_builder.cli
 ```
 
 Useful options:
 
 ```bash
+--source raceresult         # participant source parser; currently only RaceResult is implemented
+--provider itra             # rating provider; currently only ITRA is implemented
 --contest 'ULTRA 70'       # race/contest name from RaceResult
 --gender all|male|female   # participant filter
 --first 10                 # check only first N filtered table rows
@@ -83,15 +89,17 @@ Useful options:
 Build the image:
 
 ```bash
-docker build -t itra-rating-builder .
+docker build -t trail-rating-builder .
 ```
 
 Run it and write reports into the local `output/` folder:
 
 ```bash
 mkdir -p output
-docker run --rm -v "$PWD/output:/app/output" itra-rating-builder \
-  'https://my.raceresult.com/407493/' \
+docker run --rm -v "$PWD/output:/app/output" trail-rating-builder \
+  'https://my.raceresult.com/123456/' \
+  --source raceresult \
+  --provider itra \
   --contest 'ULTRA 70' \
   --gender male \
   --first 20 \
@@ -104,9 +112,11 @@ The unit tests avoid live network calls and cover parsing, matching, ranking, an
 
 ```bash
 source .venv/bin/activate
-PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s tests
+PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s tests
 ```
 
 ## Notes
 
-ITRA does not appear to publish a documented public runner-search API. This script uses the same internal endpoint called by `https://itra.run/Runners/FindARunner`, including CSRF handling and AES-CBC response decryption. If ITRA changes that frontend contract, this script may need an update.
+ITRA does not appear to publish a documented public runner-search API. The ITRA provider uses the same internal endpoint called by `https://itra.run/Runners/FindARunner`, including CSRF handling and AES-CBC response decryption. If ITRA changes that frontend contract, the provider may need an update.
+
+Additional participant sources should live under `src/trail_rating_builder/sources/`. Additional rating providers should live under `src/trail_rating_builder/providers/`.
