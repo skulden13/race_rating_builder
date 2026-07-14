@@ -4,9 +4,10 @@ import hashlib
 import json
 from dataclasses import asdict
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Mapping, Protocol
 
 from .models import Participant, RatingRow
+from .text import clean_text
 
 
 CACHE_SCHEMA_VERSION = 1
@@ -47,3 +48,45 @@ def rows_from_payload(payload: list[dict[str, Any]]) -> list[RatingRow]:
         data["participant"] = Participant(**data["participant"])
         rows.append(RatingRow(**data))
     return rows
+
+
+class RunnerSearchProvider(Protocol):
+    provider: str
+
+    def find_runner(self, name: str, count: int = 10) -> list[dict[str, Any]]:
+        ...
+
+
+class CachedRatingProvider:
+    def __init__(self, provider: RunnerSearchProvider, cache_dir: Path, refresh: bool = False) -> None:
+        self._provider = provider
+        self.cache_dir = cache_dir
+        self.refresh = refresh
+        self.provider = provider.provider
+
+    def find_runner(self, name: str, count: int = 10) -> list[dict[str, Any]]:
+        normalized_name = clean_text(name)
+        key = build_cache_key(
+            {
+                "kind": "provider_response",
+                "provider": self.provider,
+                "name": normalized_name,
+                "count": count,
+            }
+        )
+        cached = None if self.refresh else load_cached_rating(self.cache_dir, key)
+        if cached is not None:
+            return cached["results"]
+
+        results = self._provider.find_runner(name, count=count)
+        save_cached_rating(
+            self.cache_dir,
+            key,
+            {
+                "provider": self.provider,
+                "name": normalized_name,
+                "count": count,
+                "results": results,
+            },
+        )
+        return results

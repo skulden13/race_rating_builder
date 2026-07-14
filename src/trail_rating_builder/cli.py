@@ -7,7 +7,7 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 
-from .cache import build_cache_key, load_cached_rating, rows_from_payload, rows_to_payload, save_cached_rating
+from .cache import CachedRatingProvider, build_cache_key, load_cached_rating, rows_from_payload, rows_to_payload, save_cached_rating
 from .config import env_bool, env_choice, env_float, env_int
 from .matching import build_rating
 from .output import default_output_path, write_csv, write_json, write_markdown
@@ -112,6 +112,7 @@ def parse_args() -> argparse.Namespace:
 
 def build_request_cache_params(args: argparse.Namespace) -> dict[str, object]:
     return {
+        "kind": "rating_rows",
         "url": args.url,
         "source": args.source,
         "provider": args.provider,
@@ -156,6 +157,8 @@ def main() -> int:
             raise SystemExit("No participants matched the requested filters.")
 
         provider = get_provider(args)
+        if not args.no_cache:
+            provider = CachedRatingProvider(provider, cache_dir / "provider_responses", refresh=args.refresh_cache)
         rows = build_rating(participants, provider)
         if not args.no_cache:
             save_cached_rating(

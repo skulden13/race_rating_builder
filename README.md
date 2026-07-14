@@ -92,7 +92,9 @@ Useful options:
 
 ## Cache
 
-The CLI caches computed rating rows on disk. The cache key includes the effective request parameters:
+The CLI uses two cache layers.
+
+First, it caches complete computed rating rows. The cache key includes the effective request parameters:
 
 - participant source URL
 - participant source
@@ -101,7 +103,12 @@ The CLI caches computed rating rows on disk. The cache key includes the effectiv
 - gender
 - `--first`
 
-This means a previous request for `MARATHON` + `male` can be reused without refetching the participant source or querying ITRA again. Output-only settings such as `--limit`, `--format`, and `--output` are not part of the cache key, so you can reuse the same cached data for different report files or top-N views.
+This means a previous request for `MARATHON` + `male` can be reused without refetching the participant source or querying ITRA again. Output-only settings such as `--limit`, `--format`, and `--output` are not part of the cache key, so `--limit 10` followed by `--limit 3` reuses the same built rating and only changes the written report.
+
+Second, it caches individual provider search responses under `provider_responses/`. This cache is keyed by rating provider, search name, and requested result count. It lets related reports reuse runner lookups even when the full report cache key is different. For example:
+
+- `--first 10` followed by `--first 3` can reuse the first three runner searches.
+- `--gender male` followed by `--gender all` can reuse the male runner searches and request only the missing female runners.
 
 Request fresh data without reading or writing cache:
 
@@ -120,6 +127,8 @@ Refresh an existing cache entry and save the new result:
 ```bash
 PYTHONPATH=src python -m trail_rating_builder.cli --refresh-cache
 ```
+
+`--no-cache` disables both cache layers. `--refresh-cache` ignores existing entries in both layers and writes fresh data.
 
 ## Docker
 

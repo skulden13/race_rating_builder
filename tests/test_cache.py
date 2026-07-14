@@ -4,6 +4,7 @@ from pathlib import Path
 
 from helpers import FakeRatingProvider, participant
 from trail_rating_builder.cache import (
+    CachedRatingProvider,
     build_cache_key,
     load_cached_rating,
     rows_from_payload,
@@ -46,6 +47,62 @@ class CacheTests(unittest.TestCase):
         restored = rows_from_payload(cached["rows"])
         self.assertEqual(restored[0].participant.last_name, "SMITH")
         self.assertEqual(restored[0].rating_index, 700)
+
+    def test_provider_response_cache_reuses_search_results(self):
+        result = [
+            {
+                "RunnerId": 2,
+                "FirstName": "Will",
+                "LastName": "SMITH",
+                "Gender": "Male",
+                "AgeGroup": " 35-39",
+                "Pi": 700,
+                "PiIndex": "Advanced 2",
+            }
+        ]
+        with tempfile.TemporaryDirectory() as tmpdir:
+            cache_dir = Path(tmpdir)
+            first_provider = FakeRatingProvider({"SMITH Will": result})
+            first_cached_provider = CachedRatingProvider(first_provider, cache_dir)
+            self.assertEqual(first_cached_provider.find_runner("SMITH Will"), result)
+            self.assertEqual(first_provider.queries, ["SMITH Will"])
+
+            second_provider = FakeRatingProvider({})
+            second_cached_provider = CachedRatingProvider(second_provider, cache_dir)
+            self.assertEqual(second_cached_provider.find_runner("SMITH Will"), result)
+            self.assertEqual(second_provider.queries, [])
+
+    def test_provider_response_cache_refreshes_search_results(self):
+        old_result = [
+            {
+                "RunnerId": 2,
+                "FirstName": "Will",
+                "LastName": "SMITH",
+                "Gender": "Male",
+                "AgeGroup": " 35-39",
+                "Pi": 700,
+                "PiIndex": "Advanced 2",
+            }
+        ]
+        new_result = [
+            {
+                "RunnerId": 2,
+                "FirstName": "Will",
+                "LastName": "SMITH",
+                "Gender": "Male",
+                "AgeGroup": " 35-39",
+                "Pi": 710,
+                "PiIndex": "Advanced 2",
+            }
+        ]
+        with tempfile.TemporaryDirectory() as tmpdir:
+            cache_dir = Path(tmpdir)
+            CachedRatingProvider(FakeRatingProvider({"SMITH Will": old_result}), cache_dir).find_runner("SMITH Will")
+
+            provider = FakeRatingProvider({"SMITH Will": new_result})
+            cached_provider = CachedRatingProvider(provider, cache_dir, refresh=True)
+            self.assertEqual(cached_provider.find_runner("SMITH Will"), new_result)
+            self.assertEqual(provider.queries, ["SMITH Will"])
 
 
 if __name__ == "__main__":
