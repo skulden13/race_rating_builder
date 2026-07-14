@@ -1,6 +1,12 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from typing import Any, Protocol
+
+try:
+    from tqdm.auto import tqdm
+except ImportError:  # pragma: no cover - used only before dependencies are installed
+    tqdm = None
 
 from .models import Participant, RatingRow
 from .text import age_group_number, canonical_gender, clean_text, normalize_name
@@ -64,9 +70,15 @@ def best_rating_match(participant: Participant, candidates: list[dict[str, Any]]
     return candidate, score, "matched"
 
 
-def build_rating(participants: list[Participant], provider: RatingProvider) -> list[RatingRow]:
+def iter_rating_progress(participants: list[Participant], show_progress: bool | None) -> Iterable[Participant]:
+    if tqdm is None:
+        return participants
+    return tqdm(participants, desc="Rating requests", unit="runner", disable=None if show_progress is None else not show_progress)
+
+
+def build_rating(participants: list[Participant], provider: RatingProvider, show_progress: bool | None = False) -> list[RatingRow]:
     rows: list[RatingRow] = []
-    for participant in participants:
+    for participant in iter_rating_progress(participants, show_progress):
         query = f"{participant.last_name} {participant.first_name}".strip()
         candidates = provider.find_runner(query)
         if not candidates:

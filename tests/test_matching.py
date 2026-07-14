@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import Mock, patch
 
 from helpers import FakeRatingProvider, participant
 from trail_rating_builder.matching import best_rating_match, build_rating, score_candidate
@@ -73,6 +74,23 @@ class MatchingTests(unittest.TestCase):
         rows = build_rating(participants, provider)
         self.assertEqual([row.participant.last_name for row in rows], ["SMITH", "LAWRENCE"])
         self.assertEqual([row.rank for row in rows], [1, 2])
+
+    def test_build_rating_uses_progress_bar_when_enabled(self):
+        participants = [participant("Will", "SMITH", "M35-39")]
+        provider = FakeRatingProvider(
+            {
+                "SMITH Will": [
+                    {"RunnerId": 2, "FirstName": "Will", "LastName": "SMITH", "Gender": "Male", "AgeGroup": " 35-39", "Pi": 700, "PiIndex": "Advanced 2"}
+                ]
+            }
+        )
+        tqdm_mock = Mock(side_effect=lambda items, **_: items)
+
+        with patch("trail_rating_builder.matching.tqdm", tqdm_mock):
+            rows = build_rating(participants, provider, show_progress=True)
+
+        tqdm_mock.assert_called_once_with(participants, desc="Rating requests", unit="runner", disable=False)
+        self.assertEqual(rows[0].rating_index, 700)
 
 
 if __name__ == "__main__":

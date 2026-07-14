@@ -2,3 +2,4 @@ certifi==2026.6.17
 pycryptodome==3.23.0
 python-dotenv==1.2.0
 requests==2.34.2
+tqdm==4.67.1

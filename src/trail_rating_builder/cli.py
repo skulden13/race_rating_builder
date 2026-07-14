@@ -165,7 +165,7 @@ def main() -> int:
         provider = get_provider(args)
         if not args.no_cache:
             provider = CachedRatingProvider(provider, cache_dir / "provider_responses", refresh=args.refresh_cache)
-        rows = build_rating(participants, provider)
+        rows = build_rating(participants, provider, show_progress=True)
         if not args.no_cache:
             save_cached_rating(
                 cache_dir,
