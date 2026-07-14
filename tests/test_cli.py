@@ -1,9 +1,14 @@
 import os
 import sys
+import tempfile
 import unittest
-from unittest.mock import patch
+from contextlib import redirect_stdout
+from io import StringIO
+from pathlib import Path
+from unittest.mock import Mock, patch
 
-from trail_rating_builder.cli import parse_args
+from helpers import FakeRatingProvider, participant
+from trail_rating_builder.cli import main, parse_args
 
 
 class CliTests(unittest.TestCase):
@@ -20,6 +25,9 @@ class CliTests(unittest.TestCase):
             "OUTPUT_PATH": "output/report.json",
             "ITRA_REQUEST_DELAY": "0.1",
             "RATING_REQUEST_INSECURE": "true",
+            "CACHE_DIR": ".cache/test",
+            "CACHE_DISABLED": "false",
+            "CACHE_REFRESH": "false",
         }
         with patch.dict(os.environ, env, clear=True), patch.object(sys, "argv", ["trail-rating-builder"]):
             args = parse_args()
@@ -34,6 +42,100 @@ class CliTests(unittest.TestCase):
         self.assertEqual(args.output, "output/report.json")
         self.assertEqual(args.itra_delay, 0.1)
         self.assertTrue(args.insecure)
+        self.assertEqual(args.cache_dir, ".cache/test")
+        self.assertFalse(args.no_cache)
+        self.assertFalse(args.refresh_cache)
+
+    def test_main_uses_cached_rating_rows_on_second_run(self):
+        provider = FakeRatingProvider(
+            {
+                "SMITH Will": [
+                    {"RunnerId": 2, "FirstName": "Will", "LastName": "SMITH", "Gender": "Male", "AgeGroup": " 35-39", "Pi": 700, "PiIndex": "Advanced 2"}
+                ]
+            }
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            cache_dir = Path(tmpdir) / "cache"
+            first_output = Path(tmpdir) / "first.md"
+            second_output = Path(tmpdir) / "second.md"
+            base_argv = [
+                "trail-rating-builder",
+                "https://my.raceresult.com/123456/",
+                "--source",
+                "raceresult",
+                "--provider",
+                "itra",
+                "--contest",
+                "ULTRA 70",
+                "--gender",
+                "male",
+                "--cache-dir",
+                str(cache_dir),
+            ]
+
+            fetch_mock = Mock(return_value=("Mock Event", [participant("Will", "SMITH")]))
+            provider_mock = Mock(return_value=provider)
+            with redirect_stdout(StringIO()), patch.object(sys, "argv", [*base_argv, "--output", str(first_output)]), patch(
+                "trail_rating_builder.cli.fetch_participants", fetch_mock
+            ), patch("trail_rating_builder.cli.get_provider", provider_mock):
+                self.assertEqual(main(), 0)
+
+            fetch_mock.reset_mock()
+            provider_mock.reset_mock()
+            with redirect_stdout(StringIO()), patch.object(sys, "argv", [*base_argv, "--output", str(second_output)]), patch(
+                "trail_rating_builder.cli.fetch_participants", fetch_mock
+            ), patch("trail_rating_builder.cli.get_provider", provider_mock):
+                self.assertEqual(main(), 0)
+
+            fetch_mock.assert_not_called()
+            provider_mock.assert_not_called()
+            self.assertIn("Will SMITH", second_output.read_text(encoding="utf-8"))
+
+    def test_main_no_cache_bypasses_existing_cache(self):
+        provider = FakeRatingProvider(
+            {
+                "SMITH Will": [
+                    {"RunnerId": 2, "FirstName": "Will", "LastName": "SMITH", "Gender": "Male", "AgeGroup": " 35-39", "Pi": 700, "PiIndex": "Advanced 2"}
+                ]
+            }
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            cache_dir = Path(tmpdir) / "cache"
+            first_output = Path(tmpdir) / "first.md"
+            second_output = Path(tmpdir) / "second.md"
+            base_argv = [
+                "trail-rating-builder",
+                "https://my.raceresult.com/123456/",
+                "--source",
+                "raceresult",
+                "--provider",
+                "itra",
+                "--contest",
+                "ULTRA 70",
+                "--gender",
+                "male",
+                "--cache-dir",
+                str(cache_dir),
+            ]
+
+            fetch_mock = Mock(return_value=("Mock Event", [participant("Will", "SMITH")]))
+            provider_mock = Mock(return_value=provider)
+            with redirect_stdout(StringIO()), patch.object(sys, "argv", [*base_argv, "--output", str(first_output)]), patch(
+                "trail_rating_builder.cli.fetch_participants", fetch_mock
+            ), patch("trail_rating_builder.cli.get_provider", provider_mock):
+                self.assertEqual(main(), 0)
+
+            fetch_mock.reset_mock()
+            provider_mock.reset_mock()
+            with redirect_stdout(StringIO()), patch.object(
+                sys, "argv", [*base_argv, "--no-cache", "--output", str(second_output)]
+            ), patch("trail_rating_builder.cli.fetch_participants", fetch_mock), patch(
+                "trail_rating_builder.cli.get_provider", provider_mock
+            ):
+                self.assertEqual(main(), 0)
+
+            fetch_mock.assert_called_once()
+            provider_mock.assert_called_once()
 
 
 if __name__ == "__main__":

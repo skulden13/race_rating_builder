@@ -33,6 +33,9 @@ PARTICIPANTS_SOURCE_FIRST=
 RATING_OUTPUT_LIMIT=
 OUTPUT_FORMAT=md
 OUTPUT_PATH=output/results.md
+CACHE_DIR=.cache/
+CACHE_DISABLED=false
+CACHE_REFRESH=false
 ITRA_REQUEST_DELAY=0.35
 RATING_REQUEST_INSECURE=false
 ```
@@ -80,8 +83,42 @@ Useful options:
 --limit 10                 # show top N after all filtered participants are checked
 --format md|csv|json       # output format
 --output PATH              # output file path
+--cache-dir PATH           # cache directory for computed rating rows
+--no-cache                 # disable cache reads and writes
+--refresh-cache            # ignore existing cache and write fresh data
 --itra-delay 0.35          # polite delay between ITRA searches
 --insecure                 # disable TLS verification only if local CA setup is broken
+```
+
+## Cache
+
+The CLI caches computed rating rows on disk. The cache key includes the effective request parameters:
+
+- participant source URL
+- participant source
+- rating provider
+- contest
+- gender
+- `--first`
+
+This means a previous request for `MARATHON` + `male` can be reused without refetching the participant source or querying ITRA again. Output-only settings such as `--limit`, `--format`, and `--output` are not part of the cache key, so you can reuse the same cached data for different report files or top-N views.
+
+Request fresh data without reading or writing cache:
+
+```bash
+PYTHONPATH=src python -m trail_rating_builder.cli \
+  --no-cache \
+  'https://my.raceresult.com/123456/' \
+  --source raceresult \
+  --provider itra \
+  --contest 'MARATHON' \
+  --gender male
+```
+
+Refresh an existing cache entry and save the new result:
+
+```bash
+PYTHONPATH=src python -m trail_rating_builder.cli --refresh-cache
 ```
 
 ## Docker
