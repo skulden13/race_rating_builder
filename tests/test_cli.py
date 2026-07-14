@@ -28,6 +28,7 @@ class CliTests(unittest.TestCase):
             "CACHE_DIR": ".cache/test",
             "CACHE_DISABLED": "false",
             "CACHE_REFRESH": "false",
+            "RATING_REBUILD": "false",
         }
         with patch.dict(os.environ, env, clear=True), patch.object(sys, "argv", ["trail-rating-builder"]):
             args = parse_args()
@@ -45,6 +46,7 @@ class CliTests(unittest.TestCase):
         self.assertEqual(args.cache_dir, ".cache/test")
         self.assertFalse(args.no_cache)
         self.assertFalse(args.refresh_cache)
+        self.assertFalse(args.rebuild_rating)
 
     def test_main_uses_cached_rating_rows_on_second_run(self):
         provider = FakeRatingProvider(
@@ -136,6 +138,123 @@ class CliTests(unittest.TestCase):
 
             fetch_mock.assert_called_once()
             provider_mock.assert_called_once()
+
+    def test_main_reuses_provider_cache_across_different_report_filters(self):
+        male_provider = FakeRatingProvider(
+            {
+                "SMITH Will": [
+                    {"RunnerId": 2, "FirstName": "Will", "LastName": "SMITH", "Gender": "Male", "AgeGroup": " 35-39", "Pi": 700, "PiIndex": "Advanced 2"}
+                ]
+            }
+        )
+        all_provider = FakeRatingProvider(
+            {
+                "CHAN Jackie": [
+                    {"RunnerId": 3, "FirstName": "Jackie", "LastName": "CHAN", "Gender": "Female", "AgeGroup": " 35-39", "Pi": 680, "PiIndex": "Advanced 1"}
+                ]
+            }
+        )
+        participants = [
+            participant("Will", "SMITH", "M35-39"),
+            participant("Jackie", "CHAN", "F35-39"),
+        ]
+        with tempfile.TemporaryDirectory() as tmpdir:
+            cache_dir = Path(tmpdir) / "cache"
+            first_output = Path(tmpdir) / "male.md"
+            second_output = Path(tmpdir) / "all.md"
+            base_argv = [
+                "trail-rating-builder",
+                "https://my.raceresult.com/123456/",
+                "--source",
+                "raceresult",
+                "--provider",
+                "itra",
+                "--contest",
+                "ULTRA 70",
+                "--cache-dir",
+                str(cache_dir),
+            ]
+
+            fetch_mock = Mock(return_value=("Mock Event", participants))
+            with redirect_stdout(StringIO()), patch.object(
+                sys, "argv", [*base_argv, "--gender", "male", "--output", str(first_output)]
+            ), patch("trail_rating_builder.cli.fetch_participants", fetch_mock), patch(
+                "trail_rating_builder.cli.get_provider", Mock(return_value=male_provider)
+            ):
+                self.assertEqual(main(), 0)
+            self.assertEqual(male_provider.queries, ["SMITH Will"])
+
+            with redirect_stdout(StringIO()), patch.object(
+                sys, "argv", [*base_argv, "--gender", "all", "--output", str(second_output)]
+            ), patch("trail_rating_builder.cli.fetch_participants", fetch_mock), patch(
+                "trail_rating_builder.cli.get_provider", Mock(return_value=all_provider)
+            ):
+                self.assertEqual(main(), 0)
+
+            self.assertEqual(all_provider.queries, ["CHAN Jackie"])
+            output = second_output.read_text(encoding="utf-8")
+            self.assertIn("Will SMITH", output)
+            self.assertIn("Jackie CHAN", output)
+
+    def test_main_rebuild_rating_reuses_provider_cache_for_changed_participant_table(self):
+        first_provider = FakeRatingProvider(
+            {
+                "SMITH Will": [
+                    {"RunnerId": 2, "FirstName": "Will", "LastName": "SMITH", "Gender": "Male", "AgeGroup": " 35-39", "Pi": 700, "PiIndex": "Advanced 2"}
+                ]
+            }
+        )
+        second_provider = FakeRatingProvider(
+            {
+                "CHAN Jasmine": [
+                    {"RunnerId": 3, "FirstName": "Jasmine", "LastName": "CHAN", "Gender": "Female", "AgeGroup": " 35-39", "Pi": 680, "PiIndex": "Advanced 1"}
+                ]
+            }
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            cache_dir = Path(tmpdir) / "cache"
+            first_output = Path(tmpdir) / "first.md"
+            second_output = Path(tmpdir) / "second.md"
+            base_argv = [
+                "trail-rating-builder",
+                "https://my.raceresult.com/123456/",
+                "--source",
+                "raceresult",
+                "--provider",
+                "itra",
+                "--contest",
+                "ULTRA 70",
+                "--gender",
+                "all",
+                "--cache-dir",
+                str(cache_dir),
+            ]
+
+            fetch_mock = Mock(return_value=("Mock Event", [participant("Will", "SMITH", "M35-39")]))
+            with redirect_stdout(StringIO()), patch.object(sys, "argv", [*base_argv, "--output", str(first_output)]), patch(
+                "trail_rating_builder.cli.fetch_participants", fetch_mock
+            ), patch("trail_rating_builder.cli.get_provider", Mock(return_value=first_provider)):
+                self.assertEqual(main(), 0)
+            self.assertEqual(first_provider.queries, ["SMITH Will"])
+
+            fetch_mock = Mock(
+                return_value=(
+                    "Mock Event",
+                    [participant("Will", "SMITH", "M35-39"), participant("Jasmine", "CHAN", "F35-39")],
+                )
+            )
+            with redirect_stdout(StringIO()), patch.object(
+                sys, "argv", [*base_argv, "--rebuild-rating", "--output", str(second_output)]
+            ), patch("trail_rating_builder.cli.fetch_participants", fetch_mock), patch(
+                "trail_rating_builder.cli.get_provider", Mock(return_value=second_provider)
+            ):
+                self.assertEqual(main(), 0)
+
+            fetch_mock.assert_called_once()
+            self.assertEqual(second_provider.queries, ["CHAN Jasmine"])
+            output = second_output.read_text(encoding="utf-8")
+            self.assertIn("Will SMITH", output)
+            self.assertIn("Jasmine CHAN", output)
 
 
 if __name__ == "__main__":

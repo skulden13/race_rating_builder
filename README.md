@@ -36,6 +36,7 @@ OUTPUT_PATH=output/results.md
 CACHE_DIR=.cache/
 CACHE_DISABLED=false
 CACHE_REFRESH=false
+RATING_REBUILD=false
 ITRA_REQUEST_DELAY=0.35
 RATING_REQUEST_INSECURE=false
 ```
@@ -86,6 +87,7 @@ Useful options:
 --cache-dir PATH           # cache directory for computed rating rows
 --no-cache                 # disable cache reads and writes
 --refresh-cache            # ignore existing cache and write fresh data
+--rebuild-rating           # rebuild rating rows but reuse cached provider responses
 --itra-delay 0.35          # polite delay between ITRA searches
 --insecure                 # disable TLS verification only if local CA setup is broken
 ```
@@ -110,6 +112,18 @@ Second, it caches individual provider search responses under `provider_responses
 - `--first 10` followed by `--first 3` can reuse the first three runner searches.
 - `--gender male` followed by `--gender all` can reuse the male runner searches and request only the missing female runners.
 
+If the participant table changed and you want a new report while keeping previous runner lookups, rebuild only the computed rating rows:
+
+```bash
+PYTHONPATH=src python -m trail_rating_builder.cli \
+  --rebuild-rating \
+  'https://my.raceresult.com/123456/' \
+  --source raceresult \
+  --provider itra \
+  --contest 'MARATHON' \
+  --gender all
+```
+
 Request fresh data without reading or writing cache:
 
 ```bash
@@ -128,7 +142,7 @@ Refresh an existing cache entry and save the new result:
 PYTHONPATH=src python -m trail_rating_builder.cli --refresh-cache
 ```
 
-`--no-cache` disables both cache layers. `--refresh-cache` ignores existing entries in both layers and writes fresh data.
+`--no-cache` disables both cache layers. `--rebuild-rating` ignores only the complete rating-row cache. `--refresh-cache` ignores existing entries in both layers and writes fresh data.
 
 ## Docker
 

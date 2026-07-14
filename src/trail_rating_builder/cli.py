@@ -104,6 +104,12 @@ def parse_args() -> argparse.Namespace:
         default=env_bool("CACHE_REFRESH"),
         help="Ignore existing cache and write a fresh cache entry. Env: CACHE_REFRESH",
     )
+    parser.add_argument(
+        "--rebuild-rating",
+        action="store_true",
+        default=env_bool("RATING_REBUILD"),
+        help="Ignore cached computed rating rows but reuse cached provider responses. Env: RATING_REBUILD",
+    )
     args = parser.parse_args()
     if not args.url:
         parser.error("url is required, either as an argument or PARTICIPANTS_SOURCE_URL in .env")
@@ -138,7 +144,7 @@ def main() -> int:
     args = parse_args()
     cache_key = build_cache_key(build_request_cache_params(args))
     cache_dir = Path(args.cache_dir)
-    cached = None if args.no_cache or args.refresh_cache else load_cached_rating(cache_dir, cache_key)
+    cached = None if args.no_cache or args.refresh_cache or args.rebuild_rating else load_cached_rating(cache_dir, cache_key)
 
     if cached:
         event_name = cached["event_name"]
