@@ -84,7 +84,7 @@ Useful options:
 --first 10                 # check only first N filtered table rows
 --limit 10                 # show top N after all filtered participants are checked
 --format md|csv|json       # output format
---output PATH              # output file path
+--output PATH              # output file path; default includes event, contest, gender, and provider
 --cache-dir PATH           # cache directory for computed rating rows
 --no-cache                 # disable cache reads and writes
 --refresh-cache            # ignore existing cache and write fresh data

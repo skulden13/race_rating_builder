@@ -75,6 +75,12 @@ def write_json(path: Path, event_name: str, source_url: str, rows: list[RatingRo
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def default_output_path(event_name: str, fmt: str, provider: str) -> Path:
-    slug = re.sub(r"[^a-z0-9]+", "_", event_name.casefold()).strip("_") or "trail_rating"
-    return Path("output") / f"{slug}_{provider}.{fmt}"
+def slugify(value: str, fallback: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", value.casefold()).strip("_") or fallback
+
+
+def default_output_path(event_name: str, contest: str, gender: str, fmt: str, provider: str) -> Path:
+    event_slug = slugify(event_name, "trail_rating")
+    contest_slug = slugify(contest, "all_contests")
+    gender_slug = slugify(gender, "all")
+    return Path("output") / f"{event_slug}_{contest_slug}_{gender_slug}_{provider}.{fmt}"

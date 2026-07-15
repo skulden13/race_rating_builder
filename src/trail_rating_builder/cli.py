@@ -76,7 +76,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output",
         default=os.getenv("OUTPUT_PATH") or None,
-        help="Output file. Defaults to output/<event>_<provider>.<format>. Env: OUTPUT_PATH",
+        help="Output file. Defaults to output/<event>_<contest>_<gender>_<provider>.<format>. Env: OUTPUT_PATH",
     )
     parser.add_argument(
         "--itra-delay",
@@ -221,7 +221,11 @@ def main() -> int:
         LOGGER.info("Applying output limit: %s rows from %s checked rows.", args.limit, checked_count)
         rows = rows[: args.limit]
 
-    output = Path(args.output) if args.output else default_output_path(event_name, args.format, args.provider)
+    output = (
+        Path(args.output)
+        if args.output
+        else default_output_path(event_name, args.contest or "all contests", args.gender, args.format, args.provider)
+    )
     output.parent.mkdir(parents=True, exist_ok=True)
     LOGGER.info("Writing %s output to %s.", args.format, output)
     if args.format == "md":

@@ -4,10 +4,14 @@ from pathlib import Path
 
 from helpers import FakeRatingProvider, participant
 from trail_rating_builder.matching import build_rating
-from trail_rating_builder.output import write_markdown
+from trail_rating_builder.output import default_output_path, write_markdown
 
 
 class OutputTests(unittest.TestCase):
+    def test_default_output_path_includes_contest_and_gender(self):
+        path = default_output_path("Mestia Ultra 2026", "ULTRA 70", "male", "md", "itra")
+        self.assertEqual(path, Path("output/mestia_ultra_2026_ultra_70_male_itra.md"))
+
     def test_writes_markdown_table(self):
         rows = build_rating(
             [participant()],
