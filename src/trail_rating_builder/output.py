@@ -65,14 +65,15 @@ def markdown_title(path: Path) -> str:
 def write_output_index(output_dir: Path) -> Path:
     reports = sorted(path for path in output_dir.glob("*.md") if path.name.lower() != "index.md")
     index_path = output_dir / "index.md"
+    config_path = output_dir / "_config.yml"
     generated_at = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+    config_path.write_text("title: Trail Rating Reports\n", encoding="utf-8")
     with index_path.open("w", encoding="utf-8") as file:
-        file.write("# Trail Rating Reports\n\n")
         file.write(f"Generated {generated_at} UTC. {len(reports)} reports.\n\n")
         if reports:
             for report in reports:
                 title = markdown_title(report)
-                file.write(f"- [{title}]({report.name}) `{report.name}`\n")
+                file.write(f"- [{title}]({report.name})\n")
         else:
             file.write("No Markdown reports found.\n")
     return index_path

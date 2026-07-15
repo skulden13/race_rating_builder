@@ -66,11 +66,12 @@ class OutputTests(unittest.TestCase):
 
             index_path = write_output_index(output_dir)
             text = index_path.read_text(encoding="utf-8")
+            config_text = (output_dir / "_config.yml").read_text(encoding="utf-8")
 
         self.assertEqual(index_path.name, "index.md")
-        self.assertIn("# Trail Rating Reports", text)
-        self.assertIn("- [First Report](report_a.md) `report_a.md`", text)
-        self.assertIn("- [Second Report](report_b.md) `report_b.md`", text)
+        self.assertEqual(config_text, "title: Trail Rating Reports\n")
+        self.assertIn("- [First Report](report_a.md)", text)
+        self.assertIn("- [Second Report](report_b.md)", text)
 
 
 if __name__ == "__main__":
