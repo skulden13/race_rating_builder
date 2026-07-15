@@ -100,6 +100,41 @@ Build-step logs are enabled at `info` by default. Use `--log-level warning` for 
 
 When writing Markdown output, the CLI also refreshes `index.html` in the same output directory. Deploy the `output/` folder to any static host and open `index.html` to browse the generated `.md` reports.
 
+## GitHub Pages
+
+Generate or refresh reports first:
+
+```bash
+source .venv/bin/activate
+PYTHONPATH=src python -m trail_rating_builder.cli
+```
+
+Publish `output/` to the `gh-pages` branch:
+
+```bash
+./scripts/publish-gh-pages.sh
+```
+
+The script uses a temporary Git worktree, copies `output/` into it, commits the static files, and pushes to `origin/gh-pages`. It does not switch your current branch or clean your working tree.
+
+One-time GitHub setup:
+
+```text
+Repository -> Settings -> Pages
+Source: Deploy from a branch
+Branch: gh-pages
+Folder: / root
+```
+
+Optional overrides:
+
+```bash
+GH_PAGES_BRANCH=pages ./scripts/publish-gh-pages.sh
+GH_PAGES_REMOTE=origin ./scripts/publish-gh-pages.sh
+GH_PAGES_COMMIT_MESSAGE="Publish reports" ./scripts/publish-gh-pages.sh
+./scripts/publish-gh-pages.sh output
+```
+
 ## Cache
 
 The CLI uses two cache layers.
