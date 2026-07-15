@@ -56,6 +56,9 @@ class RunnerSearchProvider(Protocol):
     def find_runner(self, name: str, count: int = 10) -> list[dict[str, Any]]:
         ...
 
+    def profile_url(self, candidate: dict[str, Any]) -> str:
+        ...
+
 
 class CachedRatingProvider:
     def __init__(self, provider: RunnerSearchProvider, cache_dir: Path, refresh: bool = False) -> None:
@@ -90,3 +93,6 @@ class CachedRatingProvider:
             },
         )
         return results
+
+    def profile_url(self, candidate: dict[str, Any]) -> str:
+        return self._provider.profile_url(candidate)

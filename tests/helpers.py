@@ -1,4 +1,6 @@
 from trail_rating_builder.models import Participant
+from trail_rating_builder.providers.itra import ITRA_RUNNER_URL
+from trail_rating_builder.text import clean_text
 
 
 class FakeRatingProvider:
@@ -11,6 +13,10 @@ class FakeRatingProvider:
     def find_runner(self, name, count=10):
         self.queries.append(name)
         return self.responses.get(name, [])
+
+    def profile_url(self, candidate):
+        runner_id = clean_text(candidate.get("RunnerId"))
+        return ITRA_RUNNER_URL.format(runner_id=runner_id) if runner_id else ""
 
 
 def participant(first="Will", last="SMITH", age_group="M35-39"):

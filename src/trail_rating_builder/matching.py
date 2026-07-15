@@ -18,6 +18,9 @@ class RatingProvider(Protocol):
     def find_runner(self, name: str, count: int = 10) -> list[dict[str, Any]]:
         ...
 
+    def profile_url(self, candidate: dict[str, Any]) -> str:
+        ...
+
 
 def score_candidate(participant: Participant, candidate: dict[str, Any]) -> int:
     p_first = normalize_name(participant.first_name)
@@ -70,6 +73,18 @@ def best_rating_match(participant: Participant, candidates: list[dict[str, Any]]
     return candidate, score, "matched"
 
 
+def candidate_nationality(candidate: dict[str, Any] | None) -> str:
+    if not candidate:
+        return ""
+    return clean_text(candidate.get("Nationality"))
+
+
+def candidate_profile_url(provider: RatingProvider, candidate: dict[str, Any] | None) -> str:
+    if not candidate:
+        return ""
+    return clean_text(provider.profile_url(candidate))
+
+
 def iter_rating_progress(participants: list[Participant], show_progress: bool | None) -> Iterable[Participant]:
     if tqdm is None:
         return participants
@@ -98,6 +113,8 @@ def build_rating(participants: list[Participant], provider: RatingProvider, show
                 match_score=score,
                 candidates=len(candidates),
                 provider=provider.provider,
+                provider_nationality=candidate_nationality(match) if use_index else "",
+                provider_profile_url=candidate_profile_url(provider, match) if use_index else "",
             )
         )
 

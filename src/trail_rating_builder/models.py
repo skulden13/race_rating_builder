@@ -29,3 +29,5 @@ class RatingRow:
     match_score: int
     candidates: int
     provider: str = "itra"
+    provider_nationality: str = ""
+    provider_profile_url: str = ""

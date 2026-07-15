@@ -75,6 +75,29 @@ class MatchingTests(unittest.TestCase):
         self.assertEqual([row.participant.last_name for row in rows], ["SMITH", "LAWRENCE"])
         self.assertEqual([row.rank for row in rows], [1, 2])
 
+    def test_build_rating_adds_nationality_and_itra_profile_url(self):
+        rows = build_rating(
+            [participant("Will", "SMITH", "M35-39")],
+            FakeRatingProvider(
+                {
+                    "SMITH Will": [
+                        {
+                            "RunnerId": 2,
+                            "FirstName": "Will",
+                            "LastName": "SMITH",
+                            "Gender": "Male",
+                            "AgeGroup": " 35-39",
+                            "Nationality": "USA",
+                            "Pi": 700,
+                            "PiIndex": "Advanced 2",
+                        }
+                    ]
+                }
+            ),
+        )
+        self.assertEqual(rows[0].provider_nationality, "USA")
+        self.assertEqual(rows[0].provider_profile_url, "https://itra.run/RunnerSpace/2")
+
     def test_build_rating_uses_progress_bar_when_enabled(self):
         participants = [participant("Will", "SMITH", "M35-39")]
         provider = FakeRatingProvider(

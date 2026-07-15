@@ -5,7 +5,7 @@ import unittest
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 
-from trail_rating_builder.providers.itra import decrypt_itra_payload
+from trail_rating_builder.providers.itra import ItraClient, decrypt_itra_payload
 
 
 class ItraProviderTests(unittest.TestCase):
@@ -20,6 +20,11 @@ class ItraProviderTests(unittest.TestCase):
             "response3": base64.b64encode(key).decode(),
         }
         self.assertEqual(decrypt_itra_payload(payload)["Results"][0]["Pi"], 700)
+
+    def test_builds_runner_profile_url(self):
+        client = ItraClient()
+        self.assertEqual(client.profile_url({"RunnerId": 2}), "https://itra.run/RunnerSpace/2")
+        self.assertEqual(client.profile_url({}), "")
 
 
 if __name__ == "__main__":

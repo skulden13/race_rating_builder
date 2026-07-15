@@ -18,7 +18,16 @@ class OutputTests(unittest.TestCase):
             FakeRatingProvider(
                 {
                     "SMITH Will": [
-                        {"RunnerId": 2, "FirstName": "Will", "LastName": "SMITH", "Gender": "Male", "AgeGroup": " 35-39", "Pi": 700, "PiIndex": "Advanced 2"}
+                        {
+                            "RunnerId": 2,
+                            "FirstName": "Will",
+                            "LastName": "SMITH",
+                            "Gender": "Male",
+                            "AgeGroup": " 35-39",
+                            "Nationality": "USA",
+                            "Pi": 700,
+                            "PiIndex": "Advanced 2",
+                        }
                     ]
                 }
             ),
@@ -27,7 +36,9 @@ class OutputTests(unittest.TestCase):
             path = Path(tmpdir) / "report.md"
             write_markdown(path, "Mestia Ultra 2026", "https://my.raceresult.com/123456/", rows, "male", "ULTRA 70")
             text = path.read_text(encoding="utf-8")
-        self.assertIn("| 1 | 700 | Advanced 2 | Will SMITH | 1086 |", text)
+        self.assertIn("| 1 | 700 | Advanced 2 | [Will SMITH](https://itra.run/RunnerSpace/2) | 1086 |", text)
+        self.assertIn("| Gender | Nationality | Age group | Club | Match |", text)
+        self.assertIn("| male | USA | M35-39 | Bad Boys | matched |", text)
         self.assertIn("ITRA rating", text)
 
     def test_writes_markdown_checked_count_when_limited(self):

@@ -12,6 +12,11 @@ from trail_rating_builder.cli import main, parse_args
 
 
 class CliTests(unittest.TestCase):
+    def setUp(self):
+        self.tqdm_patch = patch("trail_rating_builder.matching.tqdm", Mock(side_effect=lambda items, **_: items))
+        self.tqdm_patch.start()
+        self.addCleanup(self.tqdm_patch.stop)
+
     def test_parse_args_uses_env_defaults(self):
         env = {
             "PARTICIPANTS_SOURCE_URL": "https://my.raceresult.com/123456/",

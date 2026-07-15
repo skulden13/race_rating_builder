@@ -37,16 +37,19 @@ def write_markdown(
             f"> Source: {source_url} + provider: {provider} - collected {today} - "
             f"{gender}, {contest}, {participant_text}.\n\n"
         )
-        file.write(f"| # | {provider} Index | Level | Name | Bib | Gender | Age group | Club | Match |\n")
-        file.write("|---|-----------:|-------|------|-----|--------|-----------|------|-------|\n")
+        file.write(f"| # | {provider} Index | Level | Name | Bib | Gender | Nationality | Age group | Club | Match |\n")
+        file.write("|---|-----------:|-------|------|-----|--------|-------------|-----------|------|-------|\n")
         for row in rows:
             rank = str(row.rank) if row.rank is not None else "-"
             name = f"{row.participant.first_name} {row.participant.last_name}".strip()
+            if row.provider_profile_url:
+                name = f"[{name}]({row.provider_profile_url})"
             club = row.participant.club or "-"
             level = row.rating_level or "-"
+            nationality = row.provider_nationality or "-"
             file.write(
                 f"| {rank} | {format_index(row)} | {level} | {name} | {row.participant.bib} | "
-                f"{row.participant.gender or '-'} | {row.participant.age_group or '-'} | {club} | "
+                f"{row.participant.gender or '-'} | {nationality} | {row.participant.age_group or '-'} | {club} | "
                 f"{row.match_status} |\n"
             )
 

@@ -17,6 +17,7 @@ from ..text import clean_text
 
 ITRA_FIND_URL = "https://itra.run/Runners/FindARunner"
 ITRA_FIND_API = "https://itra.run/api/runner/find"
+ITRA_RUNNER_URL = "https://itra.run/RunnerSpace/{runner_id}"
 
 
 class ItraClient:
@@ -85,6 +86,12 @@ class ItraClient:
         if self.delay:
             time.sleep(self.delay)
         return results
+
+    def profile_url(self, candidate: dict[str, Any]) -> str:
+        runner_id = clean_text(candidate.get("RunnerId"))
+        if not runner_id:
+            return ""
+        return ITRA_RUNNER_URL.format(runner_id=runner_id)
 
 
 def decrypt_itra_payload(payload: dict[str, str]) -> dict[str, Any]:
