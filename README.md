@@ -112,7 +112,7 @@ PYTHONPATH=src python -m trail_rating_builder.cli
 Publish `output/` to the `gh-pages` branch:
 
 ```bash
-./scripts/publish-gh-pages.sh
+./scripts/gh-pages-publish.sh
 ```
 
 The script uses a temporary Git worktree, copies `output/` into it, commits the static files, and pushes to `origin/gh-pages`. It does not switch your current branch or clean your working tree. It leaves Jekyll enabled so GitHub Pages can render `index.md`.
@@ -186,6 +186,19 @@ PYTHONPATH=src python -m trail_rating_builder.cli --refresh-cache
 ```
 
 `--no-cache` disables both cache layers. `--rebuild-rating` ignores only the complete rating-row cache. `--refresh-cache` ignores existing entries in both layers and writes fresh data.
+
+## Troubleshooting
+
+If the progress bar stays at `0/N`, the first rating-provider request has not completed yet. For ITRA this can be the CSRF token request, the first runner search, or a temporary `403` from rate limiting/bot protection.
+
+Useful options:
+
+```bash
+PYTHONPATH=src python -m trail_rating_builder.cli --log-level debug --rebuild-rating
+PYTHONPATH=src python -m trail_rating_builder.cli --itra-delay 1.5 --rebuild-rating
+```
+
+`--rebuild-rating` reuses cached provider responses and requests only missing runner lookups. `--refresh-cache` ignores cached provider responses and can trigger many ITRA requests again.
 
 ## Docker
 
