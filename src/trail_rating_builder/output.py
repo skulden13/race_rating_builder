@@ -32,7 +32,7 @@ def write_markdown(
         participant_text = f"showing {len(rows)} of {checked_count} checked participants"
     provider = rows[0].provider.upper() if rows else "ITRA"
     with path.open("w", encoding="utf-8") as file:
-        file.write(f"# {event_name} - {provider} rating\n\n")
+        file.write(f"# {event_name} - {contest} - {gender} - {provider} rating\n\n")
         file.write(
             f"> Source: {source_url} + provider: {provider} - collected {today} - "
             f"{gender}, {contest}, {participant_text}.\n\n"

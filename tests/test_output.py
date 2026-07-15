@@ -39,7 +39,7 @@ class OutputTests(unittest.TestCase):
         self.assertIn("| 1 | 700 | Advanced 2 | [Will SMITH](https://itra.run/RunnerSpace/2) | 1086 |", text)
         self.assertIn("| Gender | Nationality | Age group | Club | Match |", text)
         self.assertIn("| male | USA | M35-39 | Bad Boys | matched |", text)
-        self.assertIn("ITRA rating", text)
+        self.assertIn("# Mestia Ultra 2026 - ULTRA 70 - male - ITRA rating", text)
 
     def test_writes_markdown_checked_count_when_limited(self):
         rows = build_rating(
