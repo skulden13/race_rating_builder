@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import logging
 import os
 from pathlib import Path
 
@@ -18,6 +19,8 @@ from .text import clean_text
 
 SUPPORTED_PROVIDERS = {"itra"}
 SUPPORTED_SOURCES = {"raceresult"}
+LOG_LEVELS = {"debug", "info", "warning", "error"}
+LOGGER = logging.getLogger(__name__)
 
 
 def parse_args() -> argparse.Namespace:
@@ -110,10 +113,22 @@ def parse_args() -> argparse.Namespace:
         default=env_bool("RATING_REBUILD"),
         help="Ignore cached computed rating rows but reuse cached provider responses. Env: RATING_REBUILD",
     )
+    parser.add_argument(
+        "--log-level",
+        choices=sorted(LOG_LEVELS),
+        default=env_choice("LOG_LEVEL", LOG_LEVELS, "info"),
+        help="Logging verbosity. Env: LOG_LEVEL",
+    )
     args = parser.parse_args()
     if not args.url:
         parser.error("url is required, either as an argument or PARTICIPANTS_SOURCE_URL in .env")
     return args
+
+
+def configure_logging(level: str) -> None:
+    log_level = getattr(logging, level.upper())
+    logging.basicConfig(level=log_level, format="%(levelname)s: %(message)s")
+    logging.getLogger().setLevel(log_level)
 
 
 def build_request_cache_params(args: argparse.Namespace) -> dict[str, object]:
@@ -142,31 +157,56 @@ def get_provider(args: argparse.Namespace) -> ItraClient:
 
 def main() -> int:
     args = parse_args()
+    configure_logging(args.log_level)
     cache_key = build_cache_key(build_request_cache_params(args))
     cache_dir = Path(args.cache_dir)
+    LOGGER.debug("Cache key: %s", cache_key)
+    LOGGER.debug("Cache directory: %s", cache_dir)
+
+    if args.no_cache:
+        LOGGER.info("Cache disabled; fetching participants and querying provider directly.")
+    elif args.refresh_cache:
+        LOGGER.info("Refreshing rating rows and provider responses.")
+    elif args.rebuild_rating:
+        LOGGER.info("Rebuilding rating rows while reusing cached provider responses.")
+
     cached = None if args.no_cache or args.refresh_cache or args.rebuild_rating else load_cached_rating(cache_dir, cache_key)
 
     if cached:
+        LOGGER.info("Loaded cached rating rows.")
         event_name = cached["event_name"]
         rows = rows_from_payload(cached["rows"])
     else:
+        LOGGER.info("Fetching participants from %s source.", args.source)
         event_name, participants = fetch_participants(args)
+        LOGGER.info("Fetched %s participants for %s.", len(participants), event_name)
 
         if args.contest:
             wanted = clean_text(args.contest).casefold()
+            before_count = len(participants)
             participants = [p for p in participants if p.contest.casefold() == wanted]
+            LOGGER.info("Contest filter %r kept %s of %s participants.", args.contest, len(participants), before_count)
         if args.gender != "all":
+            before_count = len(participants)
             participants = [p for p in participants if p.gender == args.gender]
+            LOGGER.info("Gender filter %r kept %s of %s participants.", args.gender, len(participants), before_count)
         if args.first is not None:
+            before_count = len(participants)
             participants = participants[: args.first]
+            LOGGER.info("First-participants limit kept %s of %s participants.", len(participants), before_count)
         if not participants:
             raise SystemExit("No participants matched the requested filters.")
 
+        LOGGER.info("Creating %s provider.", args.provider)
         provider = get_provider(args)
         if not args.no_cache:
+            LOGGER.info("Provider response cache enabled at %s.", cache_dir / "provider_responses")
             provider = CachedRatingProvider(provider, cache_dir / "provider_responses", refresh=args.refresh_cache)
+        LOGGER.info("Building rating for %s participants.", len(participants))
         rows = build_rating(participants, provider, show_progress=True)
+        LOGGER.info("Built %s rating rows.", len(rows))
         if not args.no_cache:
+            LOGGER.info("Saving computed rating rows to cache.")
             save_cached_rating(
                 cache_dir,
                 cache_key,
@@ -178,16 +218,19 @@ def main() -> int:
             )
     checked_count = len(rows)
     if args.limit is not None:
+        LOGGER.info("Applying output limit: %s rows from %s checked rows.", args.limit, checked_count)
         rows = rows[: args.limit]
 
     output = Path(args.output) if args.output else default_output_path(event_name, args.format, args.provider)
     output.parent.mkdir(parents=True, exist_ok=True)
+    LOGGER.info("Writing %s output to %s.", args.format, output)
     if args.format == "md":
         write_markdown(output, event_name, args.url, rows, args.gender, args.contest or "all contests", checked_count)
     elif args.format == "csv":
         write_csv(output, rows)
     else:
         write_json(output, event_name, args.url, rows)
+    LOGGER.info("Finished writing report.")
 
     checked_suffix = f" after checking {checked_count}" if checked_count != len(rows) else ""
     print(f"Wrote {len(rows)} rows{checked_suffix} to {output}")

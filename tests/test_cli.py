@@ -29,6 +29,7 @@ class CliTests(unittest.TestCase):
             "CACHE_DISABLED": "false",
             "CACHE_REFRESH": "false",
             "RATING_REBUILD": "false",
+            "LOG_LEVEL": "debug",
         }
         with patch.dict(os.environ, env, clear=True), patch.object(sys, "argv", ["trail-rating-builder"]):
             args = parse_args()
@@ -47,6 +48,7 @@ class CliTests(unittest.TestCase):
         self.assertFalse(args.no_cache)
         self.assertFalse(args.refresh_cache)
         self.assertFalse(args.rebuild_rating)
+        self.assertEqual(args.log_level, "debug")
 
     def test_main_uses_cached_rating_rows_on_second_run(self):
         provider = FakeRatingProvider(
@@ -73,6 +75,8 @@ class CliTests(unittest.TestCase):
                 "male",
                 "--cache-dir",
                 str(cache_dir),
+                "--log-level",
+                "warning",
             ]
 
             fetch_mock = Mock(return_value=("Mock Event", [participant("Will", "SMITH")]))
@@ -118,6 +122,8 @@ class CliTests(unittest.TestCase):
                 "male",
                 "--cache-dir",
                 str(cache_dir),
+                "--log-level",
+                "warning",
             ]
 
             fetch_mock = Mock(return_value=("Mock Event", [participant("Will", "SMITH")]))
@@ -173,6 +179,8 @@ class CliTests(unittest.TestCase):
                 "ULTRA 70",
                 "--cache-dir",
                 str(cache_dir),
+                "--log-level",
+                "warning",
             ]
 
             fetch_mock = Mock(return_value=("Mock Event", participants))
@@ -228,6 +236,8 @@ class CliTests(unittest.TestCase):
                 "all",
                 "--cache-dir",
                 str(cache_dir),
+                "--log-level",
+                "warning",
             ]
 
             fetch_mock = Mock(return_value=("Mock Event", [participant("Will", "SMITH", "M35-39")]))
@@ -255,6 +265,45 @@ class CliTests(unittest.TestCase):
             output = second_output.read_text(encoding="utf-8")
             self.assertIn("Will SMITH", output)
             self.assertIn("Jasmine CHAN", output)
+
+    def test_main_logs_build_steps(self):
+        provider = FakeRatingProvider(
+            {
+                "SMITH Will": [
+                    {"RunnerId": 2, "FirstName": "Will", "LastName": "SMITH", "Gender": "Male", "AgeGroup": " 35-39", "Pi": 700, "PiIndex": "Advanced 2"}
+                ]
+            }
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            output = Path(tmpdir) / "results.md"
+            argv = [
+                "trail-rating-builder",
+                "https://my.raceresult.com/123456/",
+                "--source",
+                "raceresult",
+                "--provider",
+                "itra",
+                "--contest",
+                "ULTRA 70",
+                "--gender",
+                "male",
+                "--no-cache",
+                "--output",
+                str(output),
+            ]
+            fetch_mock = Mock(return_value=("Mock Event", [participant("Will", "SMITH", "M35-39")]))
+            with self.assertLogs("trail_rating_builder.cli", level="INFO") as logs, redirect_stdout(StringIO()), patch.object(
+                sys, "argv", argv
+            ), patch("trail_rating_builder.cli.fetch_participants", fetch_mock), patch(
+                "trail_rating_builder.cli.get_provider", Mock(return_value=provider)
+            ):
+                self.assertEqual(main(), 0)
+
+        messages = "\n".join(logs.output)
+        self.assertIn("Fetching participants from raceresult source.", messages)
+        self.assertIn("Fetched 1 participants for Mock Event.", messages)
+        self.assertIn("Building rating for 1 participants.", messages)
+        self.assertIn("Writing md output", messages)
 
 
 if __name__ == "__main__":

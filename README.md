@@ -37,6 +37,7 @@ CACHE_DIR=.cache/
 CACHE_DISABLED=false
 CACHE_REFRESH=false
 RATING_REBUILD=false
+LOG_LEVEL=info
 ITRA_REQUEST_DELAY=0.35
 RATING_REQUEST_INSECURE=false
 ```
@@ -88,9 +89,12 @@ Useful options:
 --no-cache                 # disable cache reads and writes
 --refresh-cache            # ignore existing cache and write fresh data
 --rebuild-rating           # rebuild rating rows but reuse cached provider responses
+--log-level debug|info|warning|error
 --itra-delay 0.35          # polite delay between ITRA searches
 --insecure                 # disable TLS verification only if local CA setup is broken
 ```
+
+Build-step logs are enabled at `info` by default. Use `--log-level warning` for quieter runs or `--log-level debug` to include cache key details.
 
 ## Cache
 
