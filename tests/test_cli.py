@@ -303,12 +303,15 @@ class CliTests(unittest.TestCase):
                 "trail_rating_builder.cli.get_provider", Mock(return_value=provider)
             ):
                 self.assertEqual(main(), 0)
+            index_text = (output.parent / "index.html").read_text(encoding="utf-8")
 
         messages = "\n".join(logs.output)
         self.assertIn("Fetching participants from raceresult source.", messages)
         self.assertIn("Fetched 1 participants for Mock Event.", messages)
         self.assertIn("Building rating for 1 participants.", messages)
         self.assertIn("Writing md output", messages)
+        self.assertIn("Updated Markdown index", messages)
+        self.assertIn("Mock Event - ULTRA 70 - male - ITRA rating", index_text)
 
 
 if __name__ == "__main__":

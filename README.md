@@ -96,6 +96,10 @@ Useful options:
 
 Build-step logs are enabled at `info` by default. Use `--log-level warning` for quieter runs or `--log-level debug` to include cache key details.
 
+## Viewing Reports
+
+When writing Markdown output, the CLI also refreshes `index.html` in the same output directory. Deploy the `output/` folder to any static host and open `index.html` to browse the generated `.md` reports.
+
 ## Cache
 
 The CLI uses two cache layers.

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import datetime as dt
+import html
 import json
 import re
 from dataclasses import asdict
@@ -52,6 +53,42 @@ def write_markdown(
                 f"{row.participant.gender or '-'} | {nationality} | {row.participant.age_group or '-'} | {club} | "
                 f"{row.match_status} |\n"
             )
+
+
+def markdown_title(path: Path) -> str:
+    for line in path.read_text(encoding="utf-8").splitlines():
+        title = line.removeprefix("# ").strip()
+        if title != line:
+            return title
+    return path.stem.replace("_", " ")
+
+
+def write_output_index(output_dir: Path) -> Path:
+    reports = sorted(path for path in output_dir.glob("*.md") if path.name.lower() != "index.md")
+    index_path = output_dir / "index.html"
+    generated_at = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+    with index_path.open("w", encoding="utf-8") as file:
+        file.write("<!doctype html>\n")
+        file.write('<html lang="en">\n')
+        file.write("<head>\n")
+        file.write('  <meta charset="utf-8">\n')
+        file.write('  <meta name="viewport" content="width=device-width, initial-scale=1">\n')
+        file.write("  <title>Trail Rating Reports</title>\n")
+        file.write("</head>\n")
+        file.write("<body>\n")
+        file.write("  <h1>Trail Rating Reports</h1>\n")
+        file.write(f"  <p>Generated {html.escape(generated_at)} UTC.</p>\n")
+        if reports:
+            file.write("  <ul>\n")
+            for report in reports:
+                title = markdown_title(report)
+                file.write(f'    <li><a href="{html.escape(report.name)}">{html.escape(title)}</a></li>\n')
+            file.write("  </ul>\n")
+        else:
+            file.write("  <p>No Markdown reports found.</p>\n")
+        file.write("</body>\n")
+        file.write("</html>\n")
+    return index_path
 
 
 def flatten_row(row: RatingRow) -> dict[str, Any]:

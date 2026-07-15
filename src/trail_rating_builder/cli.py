@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from .cache import CachedRatingProvider, build_cache_key, load_cached_rating, rows_from_payload, rows_to_payload, save_cached_rating
 from .config import env_bool, env_choice, env_float, env_int
 from .matching import build_rating
-from .output import default_output_path, write_csv, write_json, write_markdown
+from .output import default_output_path, write_csv, write_json, write_markdown, write_output_index
 from .providers.itra import ItraClient
 from .sources.raceresult import fetch_raceresult_participants
 from .text import clean_text
@@ -230,6 +230,8 @@ def main() -> int:
     LOGGER.info("Writing %s output to %s.", args.format, output)
     if args.format == "md":
         write_markdown(output, event_name, args.url, rows, args.gender, args.contest or "all contests", checked_count)
+        index_path = write_output_index(output.parent)
+        LOGGER.info("Updated Markdown index at %s.", index_path)
     elif args.format == "csv":
         write_csv(output, rows)
     else:

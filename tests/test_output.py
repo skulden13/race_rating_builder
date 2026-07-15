@@ -4,7 +4,7 @@ from pathlib import Path
 
 from helpers import FakeRatingProvider, participant
 from trail_rating_builder.matching import build_rating
-from trail_rating_builder.output import default_output_path, write_markdown
+from trail_rating_builder.output import default_output_path, write_markdown, write_output_index
 
 
 class OutputTests(unittest.TestCase):
@@ -57,6 +57,20 @@ class OutputTests(unittest.TestCase):
             write_markdown(path, "Mestia Ultra 2026", "https://my.raceresult.com/123456/", rows, "male", "ULTRA 70", checked_count=30)
             text = path.read_text(encoding="utf-8")
         self.assertIn("showing 1 of 30 checked participants", text)
+
+    def test_writes_output_index_for_markdown_reports(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            output_dir = Path(tmpdir)
+            (output_dir / "report_b.md").write_text("# Second Report\n\nBody\n", encoding="utf-8")
+            (output_dir / "report_a.md").write_text("# First Report\n\nBody\n", encoding="utf-8")
+
+            index_path = write_output_index(output_dir)
+            text = index_path.read_text(encoding="utf-8")
+
+        self.assertEqual(index_path.name, "index.html")
+        self.assertIn("<h1>Trail Rating Reports</h1>", text)
+        self.assertIn('<a href="report_a.md">First Report</a>', text)
+        self.assertIn('<a href="report_b.md">Second Report</a>', text)
 
 
 if __name__ == "__main__":
