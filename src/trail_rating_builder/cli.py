@@ -92,7 +92,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--cache-dir",
-        default=os.getenv("CACHE_DIR") or ".cache/trail_rating_builder",
+        default=os.getenv("CACHE_DIR") or ".cache/",
         help="Directory for cached rating data. Env: CACHE_DIR",
     )
     parser.add_argument(
