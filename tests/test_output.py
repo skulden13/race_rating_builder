@@ -69,8 +69,11 @@ class OutputTests(unittest.TestCase):
 
         self.assertEqual(index_path.name, "index.html")
         self.assertIn("<h1>Trail Rating Reports</h1>", text)
+        self.assertIn("<style>", text)
+        self.assertIn('class="reports"', text)
         self.assertIn('<a href="report_a.md">First Report</a>', text)
         self.assertIn('<a href="report_b.md">Second Report</a>', text)
+        self.assertIn('<span class="filename">report_a.md</span>', text)
 
 
 if __name__ == "__main__":
