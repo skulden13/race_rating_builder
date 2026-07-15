@@ -98,7 +98,7 @@ Build-step logs are enabled at `info` by default. Use `--log-level warning` for 
 
 ## Viewing Reports
 
-When writing Markdown output, the CLI also refreshes `index.html` in the same output directory. Deploy the `output/` folder to any static host and open `index.html` to browse the generated `.md` reports.
+When writing Markdown output, the CLI also refreshes `index.md` in the same output directory. GitHub Pages renders this file as the site homepage, with links to the generated `.md` reports.
 
 ## GitHub Pages
 
@@ -115,7 +115,7 @@ Publish `output/` to the `gh-pages` branch:
 ./scripts/publish-gh-pages.sh
 ```
 
-The script uses a temporary Git worktree, copies `output/` into it, commits the static files, and pushes to `origin/gh-pages`. It does not switch your current branch or clean your working tree.
+The script uses a temporary Git worktree, copies `output/` into it, commits the static files, and pushes to `origin/gh-pages`. It does not switch your current branch or clean your working tree. It leaves Jekyll enabled so GitHub Pages can render `index.md`.
 
 One-time GitHub setup:
 

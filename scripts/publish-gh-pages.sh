@@ -15,8 +15,8 @@ if [ ! -d "$OUTPUT_DIR" ]; then
   exit 1
 fi
 
-if [ ! -f "$OUTPUT_DIR/index.html" ]; then
-  echo "Warning: $OUTPUT_DIR/index.html was not found. The site will not have a report index." >&2
+if [ ! -f "$OUTPUT_DIR/index.md" ]; then
+  echo "Warning: $OUTPUT_DIR/index.md was not found. The site will not have a report index." >&2
 fi
 
 WORKTREE="$(mktemp -d)"
@@ -38,7 +38,6 @@ fi
 
 find "$WORKTREE" -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
 cp -R "$OUTPUT_DIR"/. "$WORKTREE"/
-touch "$WORKTREE/.nojekyll"
 
 git -C "$WORKTREE" add -A
 if git -C "$WORKTREE" diff --cached --quiet; then

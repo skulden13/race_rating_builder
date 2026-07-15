@@ -67,13 +67,10 @@ class OutputTests(unittest.TestCase):
             index_path = write_output_index(output_dir)
             text = index_path.read_text(encoding="utf-8")
 
-        self.assertEqual(index_path.name, "index.html")
-        self.assertIn("<h1>Trail Rating Reports</h1>", text)
-        self.assertIn("<style>", text)
-        self.assertIn('class="reports"', text)
-        self.assertIn('<a href="report_a.md">First Report</a>', text)
-        self.assertIn('<a href="report_b.md">Second Report</a>', text)
-        self.assertIn('<span class="filename">report_a.md</span>', text)
+        self.assertEqual(index_path.name, "index.md")
+        self.assertIn("# Trail Rating Reports", text)
+        self.assertIn("- [First Report](report_a.md) `report_a.md`", text)
+        self.assertIn("- [Second Report](report_b.md) `report_b.md`", text)
 
 
 if __name__ == "__main__":

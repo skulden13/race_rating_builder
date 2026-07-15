@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import csv
 import datetime as dt
-import html
 import json
 import re
 from dataclasses import asdict
@@ -65,125 +64,17 @@ def markdown_title(path: Path) -> str:
 
 def write_output_index(output_dir: Path) -> Path:
     reports = sorted(path for path in output_dir.glob("*.md") if path.name.lower() != "index.md")
-    index_path = output_dir / "index.html"
+    index_path = output_dir / "index.md"
     generated_at = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     with index_path.open("w", encoding="utf-8") as file:
-        file.write("""<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Trail Rating Reports</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --bg: #f6f8fb;
-      --panel: #ffffff;
-      --text: #172033;
-      --muted: #667085;
-      --line: #d9e1ec;
-      --accent: #0f766e;
-      --accent-strong: #115e59;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text);
-      background: var(--bg);
-    }
-    main {
-      width: min(960px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 48px 0;
-    }
-    header {
-      margin-bottom: 28px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--line);
-    }
-    h1 {
-      margin: 0;
-      font-size: 32px;
-      line-height: 1.15;
-      font-weight: 750;
-      letter-spacing: 0;
-    }
-    .meta {
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
-    .reports {
-      display: grid;
-      gap: 12px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-    .report {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 16px 18px;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-    }
-    .report a {
-      color: var(--accent);
-      font-size: 16px;
-      font-weight: 650;
-      text-decoration: none;
-    }
-    .report a:hover { color: var(--accent-strong); text-decoration: underline; }
-    .filename {
-      flex: 0 1 auto;
-      color: var(--muted);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 12px;
-      overflow-wrap: anywhere;
-      text-align: right;
-    }
-    .empty {
-      padding: 18px;
-      color: var(--muted);
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-    }
-    @media (max-width: 640px) {
-      main { width: min(100% - 24px, 960px); padding: 28px 0; }
-      h1 { font-size: 26px; }
-      .report { align-items: flex-start; flex-direction: column; gap: 8px; }
-      .filename { text-align: left; }
-    }
-  </style>
-</head>
-<body>
-  <main>
-    <header>
-      <h1>Trail Rating Reports</h1>
-""")
-        file.write(f'      <p class="meta">Generated {html.escape(generated_at)} UTC · {len(reports)} reports</p>\n')
-        file.write("    </header>\n")
+        file.write("# Trail Rating Reports\n\n")
+        file.write(f"Generated {generated_at} UTC. {len(reports)} reports.\n\n")
         if reports:
-            file.write('    <ul class="reports">\n')
             for report in reports:
                 title = markdown_title(report)
-                escaped_name = html.escape(report.name)
-                file.write(
-                    f'      <li class="report"><a href="{escaped_name}">{html.escape(title)}</a>'
-                    f'<span class="filename">{escaped_name}</span></li>\n'
-                )
-            file.write("    </ul>\n")
+                file.write(f"- [{title}]({report.name}) `{report.name}`\n")
         else:
-            file.write('    <p class="empty">No Markdown reports found.</p>\n')
-        file.write("  </main>\n")
-        file.write("</body>\n")
-        file.write("</html>\n")
+            file.write("No Markdown reports found.\n")
     return index_path
 
 

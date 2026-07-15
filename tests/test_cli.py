@@ -303,7 +303,7 @@ class CliTests(unittest.TestCase):
                 "trail_rating_builder.cli.get_provider", Mock(return_value=provider)
             ):
                 self.assertEqual(main(), 0)
-            index_text = (output.parent / "index.html").read_text(encoding="utf-8")
+            index_text = (output.parent / "index.md").read_text(encoding="utf-8")
 
         messages = "\n".join(logs.output)
         self.assertIn("Fetching participants from raceresult source.", messages)
