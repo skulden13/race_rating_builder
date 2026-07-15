@@ -81,7 +81,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--itra-delay",
         type=float,
-        default=env_float("ITRA_REQUEST_DELAY", 1),
+        default=env_float("ITRA_REQUEST_DELAY", 0.5),
         help="Delay between ITRA requests in seconds. Env: ITRA_REQUEST_DELAY",
     )
     parser.add_argument(
