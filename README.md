@@ -38,7 +38,7 @@ CACHE_DISABLED=false
 CACHE_REFRESH=false
 RATING_REBUILD=false
 LOG_LEVEL=info
-ITRA_REQUEST_DELAY=0.35
+ITRA_REQUEST_DELAY=1
 RATING_REQUEST_INSECURE=false
 ```
 
@@ -90,7 +90,7 @@ Useful options:
 --refresh-cache            # ignore existing cache and write fresh data
 --rebuild-rating           # rebuild rating rows but reuse cached provider responses
 --log-level debug|info|warning|error
---itra-delay 0.35          # polite delay between ITRA searches
+--itra-delay 1          # polite delay between ITRA searches
 --insecure                 # disable TLS verification only if local CA setup is broken
 ```
 

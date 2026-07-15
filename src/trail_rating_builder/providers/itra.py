@@ -22,7 +22,7 @@ ITRA_FIND_API = "https://itra.run/api/runner/find"
 class ItraClient:
     provider = "itra"
 
-    def __init__(self, delay: float = 0.35, insecure: bool = False) -> None:
+    def __init__(self, delay: float = 1, insecure: bool = False) -> None:
         self.session = requests.Session()
         self.session.headers.update({"User-Agent": USER_AGENT})
         self.delay = delay
