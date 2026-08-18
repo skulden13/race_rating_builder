@@ -67,6 +67,16 @@ PYTHONPATH=src python -m trail_rating_builder.cli 'https://my.raceresult.com/123
   --output output/ultra70_live_itra.md
 ```
 
+Kazbegi Mountain Marathon participants are published through RaceResult too:
+
+```bash
+PYTHONPATH=src python -m trail_rating_builder.cli 'https://my4.raceresult.com/415501/' \
+  --source raceresult \
+  --provider itra \
+  --contest 'Extreme - 35km' \
+  --gender male
+```
+
 With `.env` configured, this is enough:
 
 ```bash

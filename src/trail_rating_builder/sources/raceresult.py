@@ -9,7 +9,7 @@ import requests
 
 from ..http import USER_AGENT
 from ..models import Participant
-from ..text import clean_text
+from ..text import canonical_gender, clean_text
 
 
 def split_raceresult_name(display_name: str) -> tuple[str, str]:
@@ -31,12 +31,21 @@ def gender_from_age_group(age_group: str) -> str:
     return ""
 
 
+def clean_raceresult_group_name(value: str) -> str:
+    return re.sub(r"^#\d+_", "", clean_text(value))
+
+
 def get_raceresult_event_id(url: str) -> str:
     parsed = urlparse(url)
     match = re.search(r"/(\d+)(?:/|$)", parsed.path)
     if not match:
         raise ValueError(f"Could not extract RaceResult event id from URL: {url}")
     return match.group(1)
+
+
+def get_raceresult_host(url: str) -> str:
+    parsed = urlparse(url)
+    return parsed.netloc or "my.raceresult.com"
 
 
 def flatten_raceresult_data(data: Any) -> Iterable[tuple[str, list[list[Any]]]]:
@@ -48,12 +57,122 @@ def flatten_raceresult_data(data: Any) -> Iterable[tuple[str, list[list[Any]]]]:
                 yield from flatten_raceresult_data(value)
 
 
+def flatten_raceresult_groups(data: Any, path: tuple[str, ...] = ()) -> Iterable[tuple[tuple[str, ...], list[list[Any]]]]:
+    if isinstance(data, dict):
+        for key, value in data.items():
+            group_path = (*path, clean_raceresult_group_name(str(key)))
+            if isinstance(value, list):
+                yield group_path, value
+            else:
+                yield from flatten_raceresult_groups(value, group_path)
+
+
+def contest_from_group_path(path: tuple[str, ...]) -> str:
+    for group in path:
+        if canonical_gender(group) not in {"male", "female"}:
+            return group
+    return path[-1] if path else ""
+
+
+def gender_from_group_path(path: tuple[str, ...]) -> str:
+    for group in reversed(path):
+        gender = canonical_gender(group)
+        if gender in {"male", "female"}:
+            return gender
+    return ""
+
+
+def raceresult_contest_filters(list_json: dict[str, Any]) -> list[str]:
+    group_filters = list_json.get("groupFilters")
+    if not isinstance(group_filters, list):
+        return []
+    for group_filter in group_filters:
+        if not isinstance(group_filter, dict):
+            continue
+        values = group_filter.get("Values")
+        if group_filter.get("Type") == 1 and isinstance(values, list):
+            return [clean_text(value) for value in values if clean_text(value)]
+    return []
+
+
+def raceresult_filter_param(contest_filter: str) -> str:
+    return f"{contest_filter}\f\f<Ignore>"
+
+
+def parse_raceresult_row(row: list[Any], contest_name: str, group_gender: str = "") -> Participant | None:
+    if len(row) < 6:
+        return None
+    first, last = split_raceresult_name(row[3])
+    fourth_column = clean_text(row[4])
+    fifth_column = clean_text(row[5])
+    if gender_from_age_group(fourth_column):
+        age_group = fourth_column
+        club = fifth_column
+    else:
+        age_group = fifth_column
+        club = clean_text(row[6]) if len(row) > 6 else ""
+    gender = gender_from_age_group(age_group) or group_gender
+    return Participant(
+        bib=clean_text(row[0]),
+        race_result_id=clean_text(row[1]),
+        display_name=clean_text(row[3]),
+        first_name=first,
+        last_name=last,
+        age_group=age_group,
+        gender=gender,
+        club=club,
+        contest=clean_text(contest_name),
+    )
+
+
+def parse_raceresult_participants(list_json: dict[str, Any]) -> list[Participant]:
+    participants: list[Participant] = []
+    for group_path, rows in flatten_raceresult_groups(list_json.get("data", {})):
+        contest_name = contest_from_group_path(group_path)
+        group_gender = gender_from_group_path(group_path)
+        for row in rows:
+            if not isinstance(row, list):
+                continue
+            participant = parse_raceresult_row(row, contest_name, group_gender)
+            if participant:
+                participants.append(participant)
+    return participants
+
+
+def fetch_raceresult_list(
+    session: requests.Session,
+    url: str,
+    key: str,
+    list_config: dict[str, Any],
+    contest: str,
+    verify: bool | str,
+    filter_value: str = "",
+) -> dict[str, Any]:
+    params = {
+        "key": key,
+        "listname": list_config["Name"],
+        "page": "participants",
+        "contest": contest,
+        "r": "all",
+        "l": list_config.get("Leader", 999999),
+        "fav": "",
+        "openedGroups": "{}",
+        "term": "",
+    }
+    if filter_value:
+        params["f"] = raceresult_filter_param(filter_value)
+    response = session.get(url, params=params, timeout=30, verify=verify)
+    response.raise_for_status()
+    return response.json()
+
+
 def fetch_raceresult_participants(url: str, insecure: bool = False) -> tuple[str, list[Participant]]:
     event_id = get_raceresult_event_id(url)
+    host = get_raceresult_host(url)
     session = requests.Session()
     session.headers.update({"User-Agent": USER_AGENT})
     verify: bool | str = False if insecure else certifi.where()
-    base = f"https://my.raceresult.com/{event_id}/participants"
+    base = f"https://{host}/{event_id}/participants"
 
     config = session.get(f"{base}/config", params={"lang": "en"}, timeout=30, verify=verify)
     config.raise_for_status()
@@ -61,47 +180,24 @@ def fetch_raceresult_participants(url: str, insecure: bool = False) -> tuple[str
     event_name = clean_text(config_json.get("eventname")) or f"RaceResult {event_id}"
     server = config_json.get("server") or "my.raceresult.com"
     list_config = (config_json.get("TabConfig", {}).get("Lists") or [])[0]
-    listname = list_config["Name"]
     contest = list_config.get("Contest", "0")
 
     list_url = f"https://{server}/{event_id}/participants/list"
-    list_response = session.get(
-        list_url,
-        params={
-            "key": config_json["key"],
-            "listname": listname,
-            "page": "participants",
-            "contest": contest,
-            "r": "all",
-            "l": list_config.get("Leader", 999999),
-            "fav": "",
-            "openedGroups": "{}",
-        },
-        timeout=30,
-        verify=verify,
-    )
-    list_response.raise_for_status()
-    list_json = list_response.json()
-
-    participants: list[Participant] = []
-    for contest_key, rows in flatten_raceresult_data(list_json.get("data", {})):
-        contest_name = contest_key.split("_", 1)[1] if "_" in contest_key else contest_key
-        for row in rows:
-            if not isinstance(row, list) or len(row) < 6:
-                continue
-            first, last = split_raceresult_name(row[3])
-            age_group = clean_text(row[4])
-            participants.append(
-                Participant(
-                    bib=clean_text(row[0]),
-                    race_result_id=clean_text(row[1]),
-                    display_name=clean_text(row[3]),
-                    first_name=first,
-                    last_name=last,
-                    age_group=age_group,
-                    gender=gender_from_age_group(age_group),
-                    club=clean_text(row[5]),
-                    contest=clean_text(contest_name),
-                )
+    list_json = fetch_raceresult_list(session, list_url, config_json["key"], list_config, contest, verify)
+    contest_filters = raceresult_contest_filters(list_json)
+    if contest_filters:
+        participants = []
+        for contest_filter in contest_filters:
+            filtered_json = fetch_raceresult_list(
+                session,
+                list_url,
+                config_json["key"],
+                list_config,
+                contest,
+                verify,
+                contest_filter,
             )
+            participants.extend(parse_raceresult_participants(filtered_json))
+    else:
+        participants = parse_raceresult_participants(list_json)
     return event_name, participants
