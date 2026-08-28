@@ -1,6 +1,6 @@
 # Kazbegi Mountain Marathon 2026 - SkyRace - 16km - male - ITRA rating
 
-> Source: https://my4.raceresult.com/415501/ + provider: ITRA - collected 2026-08-27 - male, SkyRace - 16km, 136 participants.
+> Source: https://my4.raceresult.com/415501/ + provider: ITRA - collected 2026-08-28 - male, SkyRace - 16km, 136 participants.
 
 | # | ITRA Index | Level | Name | Bib | Gender | Nationality | Age group | Club | Match |
 |---|-----------:|-------|------|-----|--------|-------------|-----------|------|-------|

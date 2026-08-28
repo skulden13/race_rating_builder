@@ -1,4 +1,4 @@
-Generated 2026-08-26T20:22:22+00:00 UTC. 8 reports.
+Generated 2026-08-28T19:54:05+00:00 UTC. 8 reports.
 
 - [Kazbegi Mountain Marathon 2026 - Extreme - 36km - female - ITRA rating](kazbegi_mountain_marathon_2026_extreme_36km_female_itra.md)
 - [Kazbegi Mountain Marathon 2026 - Extreme - 36km - male - ITRA rating](kazbegi_mountain_marathon_2026_extreme_36km_male_itra.md)

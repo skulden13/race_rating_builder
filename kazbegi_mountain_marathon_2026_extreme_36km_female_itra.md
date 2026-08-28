@@ -1,6 +1,6 @@
 # Kazbegi Mountain Marathon 2026 - Extreme - 36km - female - ITRA rating
 
-> Source: https://my4.raceresult.com/415501/ + provider: ITRA - collected 2026-08-27 - female, Extreme - 36km, 14 participants.
+> Source: https://my4.raceresult.com/415501/ + provider: ITRA - collected 2026-08-28 - female, Extreme - 36km, 14 participants.
 
 | # | ITRA Index | Level | Name | Bib | Gender | Nationality | Age group | Club | Match |
 |---|-----------:|-------|------|-----|--------|-------------|-----------|------|-------|
@@ -15,6 +15,6 @@
 | 9 | 492 | Intermediate 1 | [Marharyta SOBALEVA](https://itra.run/RunnerSpace/6830477) | 116 | female | Belarus | F30-34 | Love.Run.Batumi.Club | matched |
 | 10 | 464 | Intermediate 2 | [Malgorzata FILIPCZAK](https://itra.run/RunnerSpace/7630783) | 113 | female | Poland | F35-39 | - | ambiguous |
 | 11 | 459 | Intermediate 2 | [Mariam SCHREIER](https://itra.run/RunnerSpace/7733823) | 130 | female | Georgia | F25-29 | - | matched |
-| 12 | 452 | Intermediate 2 | [Hanna SHVARTSBERG](https://itra.run/RunnerSpace/4593548) | 148 | female | Israel | F40-44 | ERA | matched |
+| 12 | 454 | Intermediate 2 | [Hanna SHVARTSBERG](https://itra.run/RunnerSpace/4593548) | 148 | female | Israel | F40-44 | ERA | matched |
 | 13 | 450 | Intermediate 3 | [Nathan DE BALTHASAR DE GACHEO](https://itra.run/RunnerSpace/7113474) | 115 | female | France | FRA | M20-24 | matched |
 | - | no profile | - | Melanie Rahel BALMER | 109 | female | - | F25-29 | - | no_profile |

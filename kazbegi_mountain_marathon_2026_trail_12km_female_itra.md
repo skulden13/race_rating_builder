@@ -1,6 +1,6 @@
 # Kazbegi Mountain Marathon 2026 - Trail - 12km - female - ITRA rating
 
-> Source: https://my4.raceresult.com/415501/ + provider: ITRA - collected 2026-08-27 - female, Trail - 12km, 84 participants.
+> Source: https://my4.raceresult.com/415501/ + provider: ITRA - collected 2026-08-28 - female, Trail - 12km, 84 participants.
 
 | # | ITRA Index | Level | Name | Bib | Gender | Nationality | Age group | Club | Match |
 |---|-----------:|-------|------|-----|--------|-------------|-----------|------|-------|

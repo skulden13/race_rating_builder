@@ -1,6 +1,6 @@
 # Kazbegi Mountain Marathon 2026 - Trail - 12km - male - ITRA rating
 
-> Source: https://my4.raceresult.com/415501/ + provider: ITRA - collected 2026-08-27 - male, Trail - 12km, 98 participants.
+> Source: https://my4.raceresult.com/415501/ + provider: ITRA - collected 2026-08-28 - male, Trail - 12km, 98 participants.
 
 | # | ITRA Index | Level | Name | Bib | Gender | Nationality | Age group | Club | Match |
 |---|-----------:|-------|------|-----|--------|-------------|-----------|------|-------|
