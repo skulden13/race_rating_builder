@@ -7,6 +7,7 @@ from trail_rating_builder.sources.raceresult import (
     fetch_raceresult_participants,
     get_raceresult_event_id,
     get_raceresult_host,
+    gender_from_age_group,
     parse_raceresult_row,
     parse_raceresult_participants,
     raceresult_contest_filters,
@@ -179,6 +180,26 @@ class RaceResultParserTests(unittest.TestCase):
         self.assertEqual(parsed.gender, "male")
         self.assertEqual(parsed.club, "Tbilisi Running Club")
         self.assertEqual(parsed.contest, "Extreme - 35km")
+
+    def test_nationality_codes_are_not_age_groups(self):
+        for nationality in ["FRA", "FIN", "MAR", "MEX"]:
+            with self.subTest(nationality=nationality):
+                self.assertEqual(gender_from_age_group(nationality), "")
+                parsed = parse_raceresult_row(
+                    ["445", "151", "Bib 445", "SMITH, Will", nationality, "M35-39", "Test Club"],
+                    "TRAIL", "female",
+                )
+                self.assertEqual(parsed.gender, "male")
+                self.assertEqual(parsed.age_group, "M35-39")
+                self.assertEqual(parsed.club, "Test Club")
+
+    def test_french_female_row_keeps_age_group_and_club(self):
+        parsed = parse_raceresult_row(
+            ["446", "152", "Bib 446", "CHAN, Jackie", "FRA", "F35-39", "Test Club"], "TRAIL"
+        )
+        self.assertEqual(parsed.gender, "female")
+        self.assertEqual(parsed.age_group, "F35-39")
+        self.assertEqual(parsed.club, "Test Club")
 
     def test_extracts_contest_group_filters(self):
         list_json = {

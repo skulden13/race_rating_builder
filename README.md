@@ -121,6 +121,8 @@ Browser mode requires an interactive desktop. The existing Docker image supports
 
 Useful options:
 
+Participant gender is read from the RaceResult age group (for example, `M35-39`), with gender groups as a fallback. Nationality codes such as `FRA` and `MAR` are not age groups. A known gender conflict between the participant and an ITRA profile is reported as `gender_mismatch` without an index or rank. Computed rating caches from the earlier parser are rebuilt automatically; cached provider responses remain reusable.
+
 ```bash
 --source raceresult         # participant source parser; currently only RaceResult is implemented
 --provider itra             # rating provider; currently only ITRA is implemented

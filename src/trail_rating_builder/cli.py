@@ -141,6 +141,7 @@ def configure_logging(level: str) -> None:
 def build_request_cache_params(args: argparse.Namespace) -> dict[str, object]:
     return {
         "kind": "rating_rows",
+        "version": 2,
         "url": args.url,
         "source": args.source,
         "provider": args.provider,

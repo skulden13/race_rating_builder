@@ -55,6 +55,16 @@ def has_exact_name_match(participant: Participant, candidate: dict[str, Any]) ->
     )
 
 
+def has_gender_conflict(participant: Participant, candidate: dict[str, Any]) -> bool:
+    participant_gender = canonical_gender(participant.gender)
+    candidate_gender = canonical_gender(clean_text(candidate.get("Gender")))
+    return (
+        participant_gender in {"male", "female"}
+        and candidate_gender in {"male", "female"}
+        and participant_gender != candidate_gender
+    )
+
+
 def best_rating_match(participant: Participant, candidates: list[dict[str, Any]]) -> tuple[dict[str, Any] | None, int, str]:
     if not candidates:
         return None, 0, "no_profile"
@@ -63,9 +73,14 @@ def best_rating_match(participant: Participant, candidates: list[dict[str, Any]]
         key=lambda item: item[0],
         reverse=True,
     )
+    compatible = [(score, candidate) for score, candidate in scored if not has_gender_conflict(participant, candidate)]
+    if compatible:
+        scored = compatible
     score, candidate = scored[0]
     if not has_exact_name_match(participant, candidate):
         return candidate, score, "name_mismatch"
+    if has_gender_conflict(participant, candidate):
+        return candidate, score, "gender_mismatch"
     if score < 75:
         return candidate, score, "ambiguous"
     if len(scored) > 1 and scored[1][0] >= score - 8:
@@ -99,7 +114,7 @@ def build_rating(participants: list[Participant], provider: RatingProvider, show
         if not candidates:
             candidates = provider.find_runner(f"{participant.first_name} {participant.last_name}".strip())
         match, score, status = best_rating_match(participant, candidates)
-        use_index = match is not None and status != "name_mismatch"
+        use_index = match is not None and status not in {"name_mismatch", "gender_mismatch"}
         rows.append(
             RatingRow(
                 rank=None,

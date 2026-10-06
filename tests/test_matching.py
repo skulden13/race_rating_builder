@@ -56,6 +56,33 @@ class MatchingTests(unittest.TestCase):
         self.assertIsNone(rows[0].rank)
         self.assertEqual(rows[0].match_status, "name_mismatch")
 
+    def test_gender_conflict_is_not_ranked_despite_exact_name(self):
+        rows = build_rating(
+            [participant("Will", "SMITH", "F35-39")],
+            FakeRatingProvider({"SMITH Will": [
+                {"RunnerId": 1, "FirstName": "Will", "LastName": "SMITH", "Gender": "Male", "Pi": 568}
+            ]}),
+        )
+        self.assertEqual(rows[0].match_status, "gender_mismatch")
+        self.assertIsNone(rows[0].rating_index)
+        self.assertIsNone(rows[0].rank)
+        self.assertEqual(rows[0].provider_profile_url, "")
+
+    def test_compatible_candidate_wins_over_conflicting_gender(self):
+        candidates = [
+            {"RunnerId": 1, "FirstName": "Jackie", "LastName": "CHAN", "Gender": "Male", "Pi": 700},
+            {"RunnerId": 2, "FirstName": "Jackie", "LastName": "CHAN", "Gender": "Female", "Pi": 500},
+        ]
+        match, _, status = best_rating_match(participant("Jackie", "CHAN", "F35-39"), candidates)
+        self.assertEqual(match["RunnerId"], 2)
+        self.assertEqual(status, "matched")
+
+    def test_unknown_provider_gender_does_not_imply_conflict(self):
+        match, _, status = best_rating_match(participant(), [
+            {"FirstName": "Will", "LastName": "SMITH", "Gender": "", "Pi": 700}
+        ])
+        self.assertEqual(status, "matched")
+
     def test_build_rating_sorts_by_rating_index(self):
         participants = [
             participant("Martin", "LAWRENCE", "M35-39"),

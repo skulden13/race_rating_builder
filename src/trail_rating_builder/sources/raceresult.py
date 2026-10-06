@@ -25,11 +25,10 @@ def split_raceresult_name(display_name: str) -> tuple[str, str]:
 
 def gender_from_age_group(age_group: str) -> str:
     age_group = clean_text(age_group).upper()
-    if age_group.startswith("M"):
-        return "male"
-    if age_group.startswith("F"):
-        return "female"
-    return ""
+    match = re.match(r"^([MF])(?:\s*\d|$)", age_group)
+    if not match:
+        return ""
+    return "male" if match.group(1) == "M" else "female"
 
 
 def clean_raceresult_group_name(value: str) -> str:
