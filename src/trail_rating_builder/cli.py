@@ -13,6 +13,7 @@ from .config import env_bool, env_choice, env_float, env_int
 from .matching import build_rating
 from .output import default_output_path, write_csv, write_json, write_markdown, write_output_index
 from .providers.itra import ItraClient
+from .providers.itra_browser import ItraBrowserClient
 from .sources.raceresult import fetch_raceresult_participants
 from .text import clean_text
 
@@ -85,6 +86,12 @@ def parse_args() -> argparse.Namespace:
         help="Delay between ITRA requests in seconds. Env: ITRA_REQUEST_DELAY",
     )
     parser.add_argument(
+        "--itra-browser",
+        action="store_true",
+        default=env_bool("ITRA_BROWSER"),
+        help="Use a visible browser for ITRA requests and manual security checks. Env: ITRA_BROWSER",
+    )
+    parser.add_argument(
         "--insecure",
         action="store_true",
         default=env_bool("RATING_REQUEST_INSECURE"),
@@ -151,6 +158,8 @@ def fetch_participants(args: argparse.Namespace):
 
 def get_provider(args: argparse.Namespace) -> ItraClient:
     if args.provider == "itra":
+        if args.itra_browser:
+            return ItraBrowserClient(delay=args.itra_delay, insecure=args.insecure)
         return ItraClient(delay=args.itra_delay, insecure=args.insecure)
     raise ValueError(f"Unsupported provider: {args.provider}")
 
@@ -199,11 +208,16 @@ def main() -> int:
 
         LOGGER.info("Creating %s provider.", args.provider)
         provider = get_provider(args)
-        if not args.no_cache:
-            LOGGER.info("Provider response cache enabled at %s.", cache_dir / "provider_responses")
-            provider = CachedRatingProvider(provider, cache_dir / "provider_responses", refresh=args.refresh_cache)
-        LOGGER.info("Building rating for %s participants.", len(participants))
-        rows = build_rating(participants, provider, show_progress=True)
+        client = provider
+        try:
+            if not args.no_cache:
+                LOGGER.info("Provider response cache enabled at %s.", cache_dir / "provider_responses")
+                provider = CachedRatingProvider(provider, cache_dir / "provider_responses", refresh=args.refresh_cache)
+            LOGGER.info("Building rating for %s participants.", len(participants))
+            rows = build_rating(participants, provider, show_progress=True)
+        finally:
+            if isinstance(client, ItraBrowserClient):
+                client.close()
         LOGGER.info("Built %s rating rows.", len(rows))
         if not args.no_cache:
             LOGGER.info("Saving computed rating rows to cache.")

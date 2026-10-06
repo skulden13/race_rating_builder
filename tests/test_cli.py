@@ -8,10 +8,42 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 from helpers import FakeRatingProvider, participant
-from trail_rating_builder.cli import main, parse_args
+from trail_rating_builder.cli import get_provider, main, parse_args
+from trail_rating_builder.providers.itra_browser import ItraBrowserClient
 
 
 class CliTests(unittest.TestCase):
+    def test_browser_flag_selects_browser_provider(self):
+        with patch("trail_rating_builder.cli.load_dotenv"), patch.dict(os.environ, {}, clear=True), patch.object(
+            sys, "argv", ["trail-rating-builder", "https://my1.raceresult.com/427872/", "--itra-browser"]
+        ):
+            args = parse_args()
+        client = get_provider(args)
+        self.addCleanup(client.close)
+        self.assertIsInstance(client, ItraBrowserClient)
+        self.assertIsNone(client._page)
+
+    def test_browser_cleanup_on_success_and_failure(self):
+        for fails in (False, True):
+            with self.subTest(fails=fails), tempfile.TemporaryDirectory() as tmpdir:
+                provider = Mock(spec=ItraBrowserClient)
+                provider.provider = "itra"
+                argv = ["trail-rating-builder", "https://my1.raceresult.com/427872/", "--itra-browser",
+                        "--cache-dir", str(Path(tmpdir) / "cache"), "--rebuild-rating",
+                        "--output", str(Path(tmpdir) / "report.md")]
+                with patch("trail_rating_builder.cli.load_dotenv"), patch.dict(os.environ, {}, clear=True), patch.object(
+                    sys, "argv", argv
+                ), patch("trail_rating_builder.cli.fetch_participants", return_value=("Mock Event", [participant()])), patch(
+                    "trail_rating_builder.cli.get_provider", return_value=provider
+                ), patch("trail_rating_builder.cli.build_rating", side_effect=RuntimeError("failed") if fails else None,
+                         return_value=[]), redirect_stdout(StringIO()):
+                    if fails:
+                        with self.assertRaisesRegex(RuntimeError, "failed"):
+                            main()
+                    else:
+                        self.assertEqual(main(), 0)
+                provider.close.assert_called_once()
+
     def setUp(self):
         self.tqdm_patch = patch("trail_rating_builder.matching.tqdm", Mock(side_effect=lambda items, **_: items))
         self.tqdm_patch.start()

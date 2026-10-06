@@ -96,6 +96,29 @@ source .venv/bin/activate
 PYTHONPATH=src python -m trail_rating_builder.cli
 ```
 
+### ITRA Browser Mode
+
+If ITRA requires a security check, use a visible Chromium browser and complete the check manually. Install the optional browser dependencies in your virtual environment:
+
+```bash
+source .venv/bin/activate
+python -m pip install -r requirements-browser.txt
+python -m playwright install chromium
+```
+
+```bash
+PYTHONPATH=src python -m trail_rating_builder.cli 'https://my1.raceresult.com/427872/' \
+  --source raceresult --provider itra \
+  --contest 'ULTRA 62' --gender male \
+  --itra-browser --itra-delay 3 --rebuild-rating
+```
+
+Complete any CAPTCHA in the opened browser window and leave it open. The script resumes when the Find a Runner page exposes its CSRF token, with a five-minute verification timeout. If the page loads but the script keeps waiting, search for a runner on the page: the script can also capture the CSRF header from that search. Searches run in the same browser session. If ITRA denies a search, the script reopens the page for verification and retries once. Verification can be required again; browser mode does not automatically solve CAPTCHAs or guarantee access. Failures report the current page URL/title and distinguish missing tokens from navigation errors or a closed page.
+
+Existing provider responses are reused, and successful new responses are cached as usual. The browser opens only for uncached searches and closes when rating requests finish or fail. You can also set `ITRA_BROWSER=true` in `.env`.
+
+Browser mode requires an interactive desktop. The existing Docker image supports the default HTTP mode; it does not include Chromium or a desktop display. Browser cookies are kept only for the current run.
+
 Useful options:
 
 ```bash
