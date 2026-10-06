@@ -1,6 +1,6 @@
 # Lisi Trail Festival 2026 - TRAIL - male - ITRA rating
 
-> Source: https://my1.raceresult.com/427872/ + provider: ITRA - collected 2026-10-06 - male, TRAIL, 161 participants.
+> Source: https://my1.raceresult.com/427872/ + provider: ITRA - collected 2026-10-06 - male, TRAIL, 164 participants.
 
 | # | ITRA Index | Level | Name | Bib | Gender | Nationality | Age group | Club | Match |
 |---|-----------:|-------|------|-----|--------|-------------|-----------|------|-------|
@@ -14,98 +14,100 @@
 | 8 | 617 | Advanced 3 | [Davis ULGIS](https://itra.run/RunnerSpace/2962125) | 469 | male | Latvia | M35-39 | EUMM | matched |
 | 9 | 596 | Advanced 4 | [Blazej GRUSZCZYK](https://itra.run/RunnerSpace/6351559) | 409 | male | Poland | M40-44 | Dynamite Makhinjauri | matched |
 | 10 | 577 | Advanced 4 | [Maksim PUGACHEV](https://itra.run/RunnerSpace/4522586) | 460 | male | Russia | M30-34 | MRC Tbilisi | ambiguous |
-| 11 | 567 | Advanced 4 | [Esteban DIAZ](https://itra.run/RunnerSpace/156387) | 549 | male | Spain | M20-24 | - | ambiguous |
-| 12 | 565 | Advanced 4 | [Aleksandr KOSHKO](https://itra.run/RunnerSpace/5919902) | 421 | male | Russia | M35-39 | Koshko Team | matched |
-| 13 | 549 | Intermediate 1 | [Ruslan KONTSEVODA](https://itra.run/RunnerSpace/4142143) | 561 | male | Russia | M55-59 | Herbalife | ambiguous |
-| 14 | 542 | Intermediate 1 | [Oleksandr ROHOZHYN](https://itra.run/RunnerSpace/6351586) | 462 | male | Ukraine | M35-39 | MRC Tbilisi | matched |
-| 15 | 540 | Intermediate 1 | [Maksim MITIN](https://itra.run/RunnerSpace/6647790) | 495 | male | Russia | M30-34 | LRBC | matched |
-| 16 | 533 | Intermediate 1 | [Alexey KRASAVIN](https://itra.run/RunnerSpace/7712193) | 438 | male | Australia | M40-44 | TRC | matched |
-| 17 | 533 | Intermediate 1 | [Aleksei SEMENOV](https://itra.run/RunnerSpace/5568504) | 573 | male | Russia | M40-44 | Lake Run Tbilisi | ambiguous |
-| 18 | 531 | Intermediate 1 | [Guga GONGADZE](https://itra.run/RunnerSpace/4968994) | 630 | male | Georgia | M30-34 | თავდაცვის მოხალისე | matched |
-| 19 | 519 | Intermediate 1 | [Siarhei KITAICHANKAU](https://itra.run/RunnerSpace/5729416) | 496 | male | Belarus | M35-39 | Love.Run.Batumi.Club/DimTeam | matched |
-| 20 | 518 | Intermediate 1 | [Ruben CAMPOS](https://itra.run/RunnerSpace/6827047) | 423 | male | Portugal | M30-34 | - | ambiguous |
-| 21 | 518 | Intermediate 1 | [Sergei IGNATOV](https://itra.run/RunnerSpace/6868957) | 569 | male | Russia | M40-44 | MRC Tbilisi | ambiguous |
-| 22 | 513 | Intermediate 1 | [Tsotne ZHGHENTI](https://itra.run/RunnerSpace/2410727) | 572 | male | Georgia | M30-34 | - | matched |
-| 23 | 509 | Intermediate 1 | [Aleksandr VASILEV](https://itra.run/RunnerSpace/4555828) | 558 | male | Russia | M30-34 | - | ambiguous |
-| 24 | 508 | Intermediate 1 | [Nikolai EROKHIN](https://itra.run/RunnerSpace/7851904) | 483 | male | Georgia | M30-34 | - | matched |
-| 25 | 499 | Intermediate 2 | [Vladislav TIMOFEEV](https://itra.run/RunnerSpace/7743481) | 440 | male | Russia | M25-29 | - | matched |
-| 26 | 499 | Intermediate 2 | [Roin DIASAMIDZE](https://itra.run/RunnerSpace/5452439) | 514 | male | Georgia | M55-59 | - | matched |
-| 27 | 498 | Intermediate 2 | [Dmytro TOMCHUK](https://itra.run/RunnerSpace/6647829) | 571 | male | Ukraine | M25-29 | Tbilisi Running Club | matched |
-| 28 | 492 | Intermediate 2 | [Pavel TESLOV](https://itra.run/RunnerSpace/4955114) | 542 | male | Georgia | M50-54 | Love.Run.Batumi.Club | matched |
-| 29 | 490 | Intermediate 2 | [Artur TUBASHOV](https://itra.run/RunnerSpace/4048696) | 525 | male | Russia | M50-54 | - | matched |
-| 30 | 485 | Intermediate 2 | [Archil MENTESHASHVILI](https://itra.run/RunnerSpace/7743585) | 535 | male | Georgia | M35-39 | GRAMMER | matched |
-| 31 | 471 | Intermediate 2 | [Ronen KRUMHOLTZ](https://itra.run/RunnerSpace/1042719) | 587 | male | Israel | M55-59 | - | matched |
-| 32 | 465 | Intermediate 2 | [Dzmitry IVANENKA](https://itra.run/RunnerSpace/5312829) | 442 | male | Belarus | M30-34 | Love.Run.Batumi.Club | matched |
-| 33 | 461 | Intermediate 2 | [Louis BETO](https://itra.run/RunnerSpace/7588963) | 494 | male | United States | M35-39 | - | matched |
-| 34 | 458 | Intermediate 2 | [Giorgi MIGINEISHVILI](https://itra.run/RunnerSpace/4206687) | 406 | male | Georgia | M35-39 | Tbilisi Running Club | ambiguous |
-| 35 | 458 | Intermediate 2 | [Mikita KULIK](https://itra.run/RunnerSpace/5568508) | 453 | male | Belarus | M30-34 | - | matched |
-| 36 | 455 | Intermediate 2 | [Nikolai GUSEV](https://itra.run/RunnerSpace/6647875) | 474 | male | Russia | M25-29 | - | matched |
-| 37 | 448 | Intermediate 3 | [Lazare DALBASHVILI](https://itra.run/RunnerSpace/7851962) | 472 | male | Georgia | M20-24 | 13 years | ambiguous |
-| 38 | 443 | Intermediate 3 | [Giorgi KSOVRELI](https://itra.run/RunnerSpace/4010361) | 504 | male | Georgia | M30-34 | - | matched |
-| 39 | 443 | Intermediate 3 | [Sergei ZAITSEV](https://itra.run/RunnerSpace/6647809) | 589 | male | Georgia | M50-54 | - | ambiguous |
-| 40 | 441 | Intermediate 3 | [Nikita SHABASHOV](https://itra.run/RunnerSpace/6827738) | 547 | male | Russia | M25-29 | - | matched |
-| 41 | 439 | Intermediate 3 | [Vazha GADELIA](https://itra.run/RunnerSpace/6647811) | 447 | male | Georgia | M25-29 | +18 | ambiguous |
-| 42 | 439 | Intermediate 3 | [Nikoloz OTINASHVILI](https://itra.run/RunnerSpace/6647812) | 607 | male | Georgia | M35-39 | AISI | matched |
-| 43 | 438 | Intermediate 3 | [Rati GLURJIDZE](https://itra.run/RunnerSpace/6343305) | 405 | male | Georgia | M20-24 | EEE | matched |
-| 44 | 438 | Intermediate 3 | [Boris DYATLOV](https://itra.run/RunnerSpace/5475916) | 457 | male | Russia | M40-44 | MRC Tbilisi | matched |
-| 45 | 432 | Intermediate 3 | [Kai MORDASS](https://itra.run/RunnerSpace/6868921) | 401 | male | Germany | M20-24 | - | matched |
-| 46 | 432 | Intermediate 3 | [Mikael GOGLICHIDZE](https://itra.run/RunnerSpace/4265414) | 509 | male | Georgia | M30-34 | - | matched |
-| 47 | 431 | Intermediate 3 | [Ilia CHISTIAKOV](https://itra.run/RunnerSpace/5452452) | 568 | male | Georgia | M35-39 | - | ambiguous |
-| 48 | 429 | Intermediate 3 | [Nodar DZIDZIGURI](https://itra.run/RunnerSpace/7851964) | 511 | male | Georgia | M35-39 | Slow-Mo | ambiguous |
-| 49 | 429 | Intermediate 3 | [Nikoloz PAPOSHVILI](https://itra.run/RunnerSpace/5565912) | 614 | male | Georgia | M20-24 | AISI | matched |
-| 50 | 427 | Intermediate 3 | [Giorgi LALIASHVILI](https://itra.run/RunnerSpace/4161482) | 629 | male | Georgia | M25-29 | თავდაცვის მოხალისე | matched |
-| 51 | 425 | Intermediate 3 | [Holger REHM](https://itra.run/RunnerSpace/6868885) | 402 | male | Germany | M25-29 | - | matched |
-| 52 | 424 | Intermediate 3 | [Alexej BARZYKIN](https://itra.run/RunnerSpace/6811245) | 410 | male | Belarus | M45-49 | ERA | matched |
-| 53 | 421 | Intermediate 3 | [Andrei OSIPOV](https://itra.run/RunnerSpace/6569909) | 465 | male | Russia | M30-34 | - | ambiguous |
-| 54 | 418 | Intermediate 3 | [Maksym KOSARENKO](https://itra.run/RunnerSpace/6868969) | 533 | male | Georgia | M50-54 | Prohujalo s vihorom | matched |
-| 55 | 408 | Intermediate 3 | [Aleksei ERMOLAEV](https://itra.run/RunnerSpace/6662087) | 517 | male | Georgia | M30-34 | BeerAthletes | ambiguous |
-| 56 | 407 | Intermediate 3 | [Aleksei KARPENKO](https://itra.run/RunnerSpace/6646344) | 455 | male | Russia | M30-34 | - | matched |
-| 57 | 406 | Intermediate 3 | [Aleksandre KAPANADZE](https://itra.run/RunnerSpace/7743499) | 463 | male | Georgia | M20-24 | - | ambiguous |
-| 58 | 404 | Intermediate 3 | [Vladimir SHEVTSOV](https://itra.run/RunnerSpace/6722700) | 419 | male | Georgia | M35-39 | - | matched |
-| 59 | 403 | Intermediate 3 | [Dmitry BELOV](https://itra.run/RunnerSpace/7350332) | 497 | male | Russia | M35-39 | - | matched |
-| 60 | 402 | Intermediate 3 | [Bidzina NADAREISHVILI](https://itra.run/RunnerSpace/7743599) | 618 | male | Georgia | M40-44 | თავდაცვის მოხალისე | matched |
-| 61 | 400 | Intermediate 4 | [Saba GURGENIDZE](https://itra.run/RunnerSpace/7851969) | 585 | male | Georgia | M15-19 | - | matched |
-| 62 | 399 | Intermediate 4 | [Giga GORGADZE](https://itra.run/RunnerSpace/7743509) | 560 | male | Georgia | M30-34 | პანექსი | matched |
-| 63 | 399 | Intermediate 4 | [Levan PAPASHVILI](https://itra.run/RunnerSpace/7743466) | 609 | male | Georgia | M30-34 | AISI | ambiguous |
-| 64 | 397 | Intermediate 4 | [Denis BOBR](https://itra.run/RunnerSpace/7851971) | 486 | male | Russia | M35-39 | - | matched |
-| 65 | 395 | Intermediate 4 | [Vadim PAVLOV](https://itra.run/RunnerSpace/4285169) | 578 | male | Russia | M45-49 | - | ambiguous |
-| 66 | 393 | Intermediate 4 | [Kakha KALMAKHELIDZE](https://itra.run/RunnerSpace/7743538) | 581 | male | Georgia | M25-29 | Lone Ranger | matched |
-| 67 | 391 | Intermediate 4 | [Nika KUZNETSOV](https://itra.run/RunnerSpace/6662110) | 407 | male | Georgia | M20-24 | ვისა ბიჭო | matched |
-| 68 | 388 | Intermediate 4 | [Gareth WARD](https://itra.run/RunnerSpace/4047023) | 433 | male | United Kingdom | M50-54 | British Embassy | matched |
-| 69 | 387 | Intermediate 4 | [Mikheil LIPARTELIANI](https://itra.run/RunnerSpace/6647834) | 593 | male | Georgia | M35-39 | - | matched |
-| 70 | 385 | Intermediate 4 | [George GOTUA](https://itra.run/RunnerSpace/7398703) | 597 | male | Georgia | M30-34 | - | matched |
-| 71 | 382 | Intermediate 4 | [Luka CHKHATARASHVILI](https://itra.run/RunnerSpace/7851976) | 417 | male | Georgia | M25-29 | GeoRunners | matched |
-| 72 | 379 | Intermediate 4 | [Evgenii VIUSHIN](https://itra.run/RunnerSpace/7401419) | 563 | male | Russia | M45-49 | Drunk Lab | matched |
-| 73 | 376 | Intermediate 4 | [Richard John HOLT](https://itra.run/RunnerSpace/7003976) | 412 | male | United Kingdom | M45-49 | - | ambiguous |
-| 74 | 376 | Intermediate 4 | [Luka KHANJALADZE](https://itra.run/RunnerSpace/6163411) | 468 | male | Georgia | M20-24 | NESVI | matched |
-| 75 | 376 | Intermediate 4 | [Alfred HERTZWOLF](https://itra.run/RunnerSpace/4312408) | 539 | male | Georgia | M70+ | - | matched |
-| 76 | 375 | Intermediate 4 | [Giorgi MAMULASHVILI](https://itra.run/RunnerSpace/6869013) | 454 | male | Georgia | M20-24 | TrailBlazers | ambiguous |
-| 77 | 375 | Intermediate 4 | [Giorgi KANDELAKI](https://itra.run/RunnerSpace/4265424) | 458 | male | Georgia | M40-44 | - | ambiguous |
-| 78 | 370 | Intermediate 4 | [Denis SHEVTSOV](https://itra.run/RunnerSpace/7483717) | 499 | male | Georgia | M30-34 | MRC Tbilisi | ambiguous |
-| 79 | 367 | Intermediate 4 | [Giorgi MACHARASHVILI](https://itra.run/RunnerSpace/7743523) | 632 | male | Georgia | M35-39 | HunnewellCement | matched |
-| 80 | 363 | Intermediate 4 | [Davit KHANJALADZE](https://itra.run/RunnerSpace/6351605) | 491 | male | Georgia | M25-29 | NESVI | matched |
-| 81 | 357 | Intermediate 4 | [Nikolai PORTNOV](https://itra.run/RunnerSpace/7792959) | 564 | male | Russia | M30-34 | Lake Run Tbilisi | ambiguous |
-| 82 | 353 | Intermediate 4 | [Giorgi TSITLIDZE](https://itra.run/RunnerSpace/7743643) | 550 | male | Georgia | M30-34 | Mandragora | matched |
-| 83 | 351 | Intermediate 4 | [Nikoloz JAVAKHISHVILI](https://itra.run/RunnerSpace/7743532) | 579 | male | Georgia | M25-29 | Brego | ambiguous |
-| 84 | 343 | Intermediate 4 | [Mikheil LABADZE](https://itra.run/RunnerSpace/7743535) | 487 | male | Georgia | M20-24 | - | matched |
-| 85 | 340 | Intermediate 4 | [Zurab ABZIANIDZE](https://itra.run/RunnerSpace/6868991) | 524 | male | Georgia | M25-29 | GeoRunners | matched |
-| 86 | 334 | Intermediate 4 | [Yeng HANG](https://itra.run/RunnerSpace/7398715) | 416 | male | Georgia | M20-24 | - | matched |
-| 87 | 333 | Intermediate 4 | [Luka PANKVELASHVILI](https://itra.run/RunnerSpace/7743547) | 553 | male | Georgia | M25-29 | GeoRunners | matched |
-| 88 | 329 | Intermediate 4 | [Tsotne KHARSHILADZE](https://itra.run/RunnerSpace/7321211) | 577 | male | Georgia | M25-29 | RRC | matched |
-| 89 | 325 | Intermediate 4 | [Roman TSIBIZOV](https://itra.run/RunnerSpace/7851993) | 431 | male | Kazakhstan | M35-39 | MRC Tbilisi | matched |
-| 90 | 323 | Intermediate 4 | [Ibrahim BAKIR](https://itra.run/RunnerSpace/7483718) | 498 | male | Sweden | M20-24 | TMA | ambiguous |
-| 91 | 313 | Intermediate 4 | [Davit MNATOBISHVILI](https://itra.run/RunnerSpace/7851933) | 506 | male | Georgia | M25-29 | - | matched |
-| 92 | 310 | Intermediate 4 | [Aleksandre JELIA](https://itra.run/RunnerSpace/7743556) | 617 | male | Georgia | M35-39 | თავდაცვის მოხალისე | matched |
-| 93 | 304 | Intermediate 4 | [Dzianis SAVOSTSIN](https://itra.run/RunnerSpace/6722778) | 451 | male | Belarus | M35-39 | - | matched |
-| 94 | 304 | Intermediate 4 | [Davit DVALI](https://itra.run/RunnerSpace/7852006) | 477 | male | Georgia | M25-29 | ჩაწყობითაა ყველაფერი | matched |
-| 95 | 304 | Intermediate 4 | [Guram MODEBADZE](https://itra.run/RunnerSpace/7852005) | 478 | male | Georgia | M25-29 | ჩაწყობითაა ყველაფერი | matched |
-| 96 | 299 | Novice | [Luka ABUSELIDZE](https://itra.run/RunnerSpace/7852011) | 628 | male | Georgia | M20-24 | თავდაცვის მოხალისე | matched |
-| 97 | 293 | Novice | [Nikoloz JANGISHERASHVILI](https://itra.run/RunnerSpace/7851939) | 441 | male | Georgia | M25-29 | - | matched |
-| 98 | 293 | Novice | [Dato GEGIADZE](https://itra.run/RunnerSpace/7851940) | 621 | male | Georgia | M20-24 | თავდაცვის მოხალისე | matched |
-| 99 | 283 | Novice | [Archil SHARASHENIDZE](https://itra.run/RunnerSpace/7851942) | 500 | male | Georgia | M25-29 | - | matched |
-| 100 | 263 | Novice | [Giorgi MINADZE](https://itra.run/RunnerSpace/5092406) | 456 | male | Georgia | M40-44 | - | matched |
-| 101 | 262 | Novice | [Nikoloz GONIEVI](https://itra.run/RunnerSpace/6869036) | 479 | male | Georgia | M25-29 | - | matched |
-| 102 | 257 | Novice | [Rishabh SINGH](https://itra.run/RunnerSpace/6869041) | 413 | male | India | M20-24 | None | matched |
+| 11 | 568 | Advanced 4 | [Valentin GROS](https://itra.run/RunnerSpace/7917656) | 445 | male | France | M35-39 | EUMM | ambiguous |
+| 12 | 567 | Advanced 4 | [Esteban DIAZ](https://itra.run/RunnerSpace/156387) | 549 | male | Spain | M20-24 | - | ambiguous |
+| 13 | 565 | Advanced 4 | [Aleksandr KOSHKO](https://itra.run/RunnerSpace/5919902) | 421 | male | Russia | M35-39 | Koshko Team | matched |
+| 14 | 549 | Intermediate 1 | [Ruslan KONTSEVODA](https://itra.run/RunnerSpace/4142143) | 561 | male | Russia | M55-59 | Herbalife | ambiguous |
+| 15 | 542 | Intermediate 1 | [Oleksandr ROHOZHYN](https://itra.run/RunnerSpace/6351586) | 462 | male | Ukraine | M35-39 | MRC Tbilisi | matched |
+| 16 | 540 | Intermediate 1 | [Maksim MITIN](https://itra.run/RunnerSpace/6647790) | 495 | male | Russia | M30-34 | LRBC | matched |
+| 17 | 533 | Intermediate 1 | [Alexey KRASAVIN](https://itra.run/RunnerSpace/7712193) | 438 | male | Australia | M40-44 | TRC | matched |
+| 18 | 533 | Intermediate 1 | [Aleksei SEMENOV](https://itra.run/RunnerSpace/5568504) | 573 | male | Russia | M40-44 | Lake Run Tbilisi | ambiguous |
+| 19 | 531 | Intermediate 1 | [Guga GONGADZE](https://itra.run/RunnerSpace/4968994) | 630 | male | Georgia | M30-34 | თავდაცვის მოხალისე | matched |
+| 20 | 519 | Intermediate 1 | [Siarhei KITAICHANKAU](https://itra.run/RunnerSpace/5729416) | 496 | male | Belarus | M35-39 | Love.Run.Batumi.Club/DimTeam | matched |
+| 21 | 518 | Intermediate 1 | [Ruben CAMPOS](https://itra.run/RunnerSpace/6827047) | 423 | male | Portugal | M30-34 | - | ambiguous |
+| 22 | 518 | Intermediate 1 | [Sergei IGNATOV](https://itra.run/RunnerSpace/6868957) | 569 | male | Russia | M40-44 | MRC Tbilisi | ambiguous |
+| 23 | 513 | Intermediate 1 | [Tsotne ZHGHENTI](https://itra.run/RunnerSpace/2410727) | 572 | male | Georgia | M30-34 | - | matched |
+| 24 | 509 | Intermediate 1 | [Aleksandr VASILEV](https://itra.run/RunnerSpace/4555828) | 558 | male | Russia | M30-34 | - | ambiguous |
+| 25 | 508 | Intermediate 1 | [Nikolai EROKHIN](https://itra.run/RunnerSpace/7851904) | 483 | male | Georgia | M30-34 | - | matched |
+| 26 | 499 | Intermediate 2 | [Vladislav TIMOFEEV](https://itra.run/RunnerSpace/7743481) | 440 | male | Russia | M25-29 | - | matched |
+| 27 | 499 | Intermediate 2 | [Roin DIASAMIDZE](https://itra.run/RunnerSpace/5452439) | 514 | male | Georgia | M55-59 | - | matched |
+| 28 | 498 | Intermediate 2 | [Dmytro TOMCHUK](https://itra.run/RunnerSpace/6647829) | 571 | male | Ukraine | M25-29 | Tbilisi Running Club | matched |
+| 29 | 492 | Intermediate 2 | [Pavel TESLOV](https://itra.run/RunnerSpace/4955114) | 542 | male | Georgia | M50-54 | Love.Run.Batumi.Club | matched |
+| 30 | 490 | Intermediate 2 | [Artur TUBASHOV](https://itra.run/RunnerSpace/4048696) | 525 | male | Russia | M50-54 | - | matched |
+| 31 | 485 | Intermediate 2 | [Archil MENTESHASHVILI](https://itra.run/RunnerSpace/7743585) | 535 | male | Georgia | M35-39 | GRAMMER | matched |
+| 32 | 471 | Intermediate 2 | [Ronen KRUMHOLTZ](https://itra.run/RunnerSpace/1042719) | 587 | male | Israel | M55-59 | - | matched |
+| 33 | 465 | Intermediate 2 | [Dzmitry IVANENKA](https://itra.run/RunnerSpace/5312829) | 442 | male | Belarus | M30-34 | Love.Run.Batumi.Club | matched |
+| 34 | 461 | Intermediate 2 | [Louis BETO](https://itra.run/RunnerSpace/7588963) | 494 | male | United States | M35-39 | - | matched |
+| 35 | 458 | Intermediate 2 | [Giorgi MIGINEISHVILI](https://itra.run/RunnerSpace/4206687) | 406 | male | Georgia | M35-39 | Tbilisi Running Club | ambiguous |
+| 36 | 458 | Intermediate 2 | [Mikita KULIK](https://itra.run/RunnerSpace/5568508) | 453 | male | Belarus | M30-34 | - | matched |
+| 37 | 455 | Intermediate 2 | [Nikolai GUSEV](https://itra.run/RunnerSpace/6647875) | 474 | male | Russia | M25-29 | - | matched |
+| 38 | 448 | Intermediate 3 | [Lazare DALBASHVILI](https://itra.run/RunnerSpace/7851962) | 472 | male | Georgia | M20-24 | 13 years | ambiguous |
+| 39 | 443 | Intermediate 3 | [Giorgi KSOVRELI](https://itra.run/RunnerSpace/4010361) | 504 | male | Georgia | M30-34 | - | matched |
+| 40 | 443 | Intermediate 3 | [Sergei ZAITSEV](https://itra.run/RunnerSpace/6647809) | 589 | male | Georgia | M50-54 | - | ambiguous |
+| 41 | 441 | Intermediate 3 | [Nikita SHABASHOV](https://itra.run/RunnerSpace/6827738) | 547 | male | Russia | M25-29 | - | matched |
+| 42 | 439 | Intermediate 3 | [Vazha GADELIA](https://itra.run/RunnerSpace/6647811) | 447 | male | Georgia | M25-29 | +18 | ambiguous |
+| 43 | 439 | Intermediate 3 | [Nikoloz OTINASHVILI](https://itra.run/RunnerSpace/6647812) | 607 | male | Georgia | M35-39 | AISI | matched |
+| 44 | 438 | Intermediate 3 | [Rati GLURJIDZE](https://itra.run/RunnerSpace/6343305) | 405 | male | Georgia | M20-24 | EEE | matched |
+| 45 | 438 | Intermediate 3 | [Boris DYATLOV](https://itra.run/RunnerSpace/5475916) | 457 | male | Russia | M40-44 | MRC Tbilisi | matched |
+| 46 | 432 | Intermediate 3 | [Kai MORDASS](https://itra.run/RunnerSpace/6868921) | 401 | male | Germany | M20-24 | - | matched |
+| 47 | 432 | Intermediate 3 | [Mikael GOGLICHIDZE](https://itra.run/RunnerSpace/4265414) | 509 | male | Georgia | M30-34 | - | matched |
+| 48 | 431 | Intermediate 3 | [Ilia CHISTIAKOV](https://itra.run/RunnerSpace/5452452) | 568 | male | Georgia | M35-39 | - | ambiguous |
+| 49 | 429 | Intermediate 3 | [Nodar DZIDZIGURI](https://itra.run/RunnerSpace/7851964) | 511 | male | Georgia | M35-39 | Slow-Mo | ambiguous |
+| 50 | 429 | Intermediate 3 | [Nikoloz PAPOSHVILI](https://itra.run/RunnerSpace/5565912) | 614 | male | Georgia | M20-24 | AISI | matched |
+| 51 | 427 | Intermediate 3 | [Giorgi LALIASHVILI](https://itra.run/RunnerSpace/4161482) | 629 | male | Georgia | M25-29 | თავდაცვის მოხალისე | matched |
+| 52 | 425 | Intermediate 3 | [Holger REHM](https://itra.run/RunnerSpace/6868885) | 402 | male | Germany | M25-29 | - | matched |
+| 53 | 424 | Intermediate 3 | [Alexej BARZYKIN](https://itra.run/RunnerSpace/6811245) | 410 | male | Belarus | M45-49 | ERA | matched |
+| 54 | 421 | Intermediate 3 | [Andrei OSIPOV](https://itra.run/RunnerSpace/6569909) | 465 | male | Russia | M30-34 | - | ambiguous |
+| 55 | 418 | Intermediate 3 | [Maksym KOSARENKO](https://itra.run/RunnerSpace/6868969) | 533 | male | Georgia | M50-54 | Prohujalo s vihorom | matched |
+| 56 | 408 | Intermediate 3 | [Aleksei ERMOLAEV](https://itra.run/RunnerSpace/6662087) | 517 | male | Georgia | M30-34 | BeerAthletes | ambiguous |
+| 57 | 407 | Intermediate 3 | [Aleksei KARPENKO](https://itra.run/RunnerSpace/6646344) | 455 | male | Russia | M30-34 | - | matched |
+| 58 | 406 | Intermediate 3 | [Aleksandre KAPANADZE](https://itra.run/RunnerSpace/7743499) | 463 | male | Georgia | M20-24 | - | ambiguous |
+| 59 | 404 | Intermediate 3 | [Vladimir SHEVTSOV](https://itra.run/RunnerSpace/6722700) | 419 | male | Georgia | M35-39 | - | matched |
+| 60 | 403 | Intermediate 3 | [Dmitry BELOV](https://itra.run/RunnerSpace/7350332) | 497 | male | Russia | M35-39 | - | matched |
+| 61 | 403 | Intermediate 3 | [Benoit PORLIER](https://itra.run/RunnerSpace/6277945) | 502 | male | France | M40-44 | - | matched |
+| 62 | 402 | Intermediate 3 | [Bidzina NADAREISHVILI](https://itra.run/RunnerSpace/7743599) | 618 | male | Georgia | M40-44 | თავდაცვის მოხალისე | matched |
+| 63 | 400 | Intermediate 4 | [Saba GURGENIDZE](https://itra.run/RunnerSpace/7851969) | 585 | male | Georgia | M15-19 | - | matched |
+| 64 | 399 | Intermediate 4 | [Giga GORGADZE](https://itra.run/RunnerSpace/7743509) | 560 | male | Georgia | M30-34 | პანექსი | matched |
+| 65 | 399 | Intermediate 4 | [Levan PAPASHVILI](https://itra.run/RunnerSpace/7743466) | 609 | male | Georgia | M30-34 | AISI | ambiguous |
+| 66 | 397 | Intermediate 4 | [Denis BOBR](https://itra.run/RunnerSpace/7851971) | 486 | male | Russia | M35-39 | - | matched |
+| 67 | 395 | Intermediate 4 | [Vadim PAVLOV](https://itra.run/RunnerSpace/4285169) | 578 | male | Russia | M45-49 | - | ambiguous |
+| 68 | 393 | Intermediate 4 | [Kakha KALMAKHELIDZE](https://itra.run/RunnerSpace/7743538) | 581 | male | Georgia | M25-29 | Lone Ranger | matched |
+| 69 | 391 | Intermediate 4 | [Nika KUZNETSOV](https://itra.run/RunnerSpace/6662110) | 407 | male | Georgia | M20-24 | ვისა ბიჭო | matched |
+| 70 | 388 | Intermediate 4 | [Gareth WARD](https://itra.run/RunnerSpace/4047023) | 433 | male | United Kingdom | M50-54 | British Embassy | matched |
+| 71 | 387 | Intermediate 4 | [Mikheil LIPARTELIANI](https://itra.run/RunnerSpace/6647834) | 593 | male | Georgia | M35-39 | - | matched |
+| 72 | 385 | Intermediate 4 | [George GOTUA](https://itra.run/RunnerSpace/7398703) | 597 | male | Georgia | M30-34 | - | matched |
+| 73 | 382 | Intermediate 4 | [Luka CHKHATARASHVILI](https://itra.run/RunnerSpace/7851976) | 417 | male | Georgia | M25-29 | GeoRunners | matched |
+| 74 | 379 | Intermediate 4 | [Evgenii VIUSHIN](https://itra.run/RunnerSpace/7401419) | 563 | male | Russia | M45-49 | Drunk Lab | matched |
+| 75 | 376 | Intermediate 4 | [Richard John HOLT](https://itra.run/RunnerSpace/7003976) | 412 | male | United Kingdom | M45-49 | - | ambiguous |
+| 76 | 376 | Intermediate 4 | [Luka KHANJALADZE](https://itra.run/RunnerSpace/6163411) | 468 | male | Georgia | M20-24 | NESVI | matched |
+| 77 | 376 | Intermediate 4 | [Alfred HERTZWOLF](https://itra.run/RunnerSpace/4312408) | 539 | male | Georgia | M70+ | - | matched |
+| 78 | 375 | Intermediate 4 | [Giorgi MAMULASHVILI](https://itra.run/RunnerSpace/6869013) | 454 | male | Georgia | M20-24 | TrailBlazers | ambiguous |
+| 79 | 375 | Intermediate 4 | [Giorgi KANDELAKI](https://itra.run/RunnerSpace/4265424) | 458 | male | Georgia | M40-44 | - | ambiguous |
+| 80 | 370 | Intermediate 4 | [Denis SHEVTSOV](https://itra.run/RunnerSpace/7483717) | 499 | male | Georgia | M30-34 | MRC Tbilisi | ambiguous |
+| 81 | 367 | Intermediate 4 | [Giorgi MACHARASHVILI](https://itra.run/RunnerSpace/7743523) | 632 | male | Georgia | M35-39 | HunnewellCement | matched |
+| 82 | 363 | Intermediate 4 | [Davit KHANJALADZE](https://itra.run/RunnerSpace/6351605) | 491 | male | Georgia | M25-29 | NESVI | matched |
+| 83 | 357 | Intermediate 4 | [Nikolai PORTNOV](https://itra.run/RunnerSpace/7792959) | 564 | male | Russia | M30-34 | Lake Run Tbilisi | ambiguous |
+| 84 | 353 | Intermediate 4 | [Giorgi TSITLIDZE](https://itra.run/RunnerSpace/7743643) | 550 | male | Georgia | M30-34 | Mandragora | matched |
+| 85 | 351 | Intermediate 4 | [Nikoloz JAVAKHISHVILI](https://itra.run/RunnerSpace/7743532) | 579 | male | Georgia | M25-29 | Brego | ambiguous |
+| 86 | 343 | Intermediate 4 | [Mikheil LABADZE](https://itra.run/RunnerSpace/7743535) | 487 | male | Georgia | M20-24 | - | matched |
+| 87 | 340 | Intermediate 4 | [Zurab ABZIANIDZE](https://itra.run/RunnerSpace/6868991) | 524 | male | Georgia | M25-29 | GeoRunners | matched |
+| 88 | 334 | Intermediate 4 | [Yeng HANG](https://itra.run/RunnerSpace/7398715) | 416 | male | Georgia | M20-24 | - | matched |
+| 89 | 333 | Intermediate 4 | [Luka PANKVELASHVILI](https://itra.run/RunnerSpace/7743547) | 553 | male | Georgia | M25-29 | GeoRunners | matched |
+| 90 | 329 | Intermediate 4 | [Tsotne KHARSHILADZE](https://itra.run/RunnerSpace/7321211) | 577 | male | Georgia | M25-29 | RRC | matched |
+| 91 | 325 | Intermediate 4 | [Roman TSIBIZOV](https://itra.run/RunnerSpace/7851993) | 431 | male | Kazakhstan | M35-39 | MRC Tbilisi | matched |
+| 92 | 323 | Intermediate 4 | [Ibrahim BAKIR](https://itra.run/RunnerSpace/7483718) | 498 | male | Sweden | M20-24 | TMA | ambiguous |
+| 93 | 313 | Intermediate 4 | [Davit MNATOBISHVILI](https://itra.run/RunnerSpace/7851933) | 506 | male | Georgia | M25-29 | - | matched |
+| 94 | 310 | Intermediate 4 | [Aleksandre JELIA](https://itra.run/RunnerSpace/7743556) | 617 | male | Georgia | M35-39 | თავდაცვის მოხალისე | matched |
+| 95 | 304 | Intermediate 4 | [Dzianis SAVOSTSIN](https://itra.run/RunnerSpace/6722778) | 451 | male | Belarus | M35-39 | - | matched |
+| 96 | 304 | Intermediate 4 | [Davit DVALI](https://itra.run/RunnerSpace/7852006) | 477 | male | Georgia | M25-29 | ჩაწყობითაა ყველაფერი | matched |
+| 97 | 304 | Intermediate 4 | [Guram MODEBADZE](https://itra.run/RunnerSpace/7852005) | 478 | male | Georgia | M25-29 | ჩაწყობითაა ყველაფერი | matched |
+| 98 | 299 | Novice | [Luka ABUSELIDZE](https://itra.run/RunnerSpace/7852011) | 628 | male | Georgia | M20-24 | თავდაცვის მოხალისე | matched |
+| 99 | 293 | Novice | [Nikoloz JANGISHERASHVILI](https://itra.run/RunnerSpace/7851939) | 441 | male | Georgia | M25-29 | - | matched |
+| 100 | 293 | Novice | [Dato GEGIADZE](https://itra.run/RunnerSpace/7851940) | 621 | male | Georgia | M20-24 | თავდაცვის მოხალისე | matched |
+| 101 | 283 | Novice | [Archil SHARASHENIDZE](https://itra.run/RunnerSpace/7851942) | 500 | male | Georgia | M25-29 | - | matched |
+| 102 | 263 | Novice | [Giorgi MINADZE](https://itra.run/RunnerSpace/5092406) | 456 | male | Georgia | M40-44 | - | matched |
+| 103 | 262 | Novice | [Nikoloz GONIEVI](https://itra.run/RunnerSpace/6869036) | 479 | male | Georgia | M25-29 | - | matched |
+| 104 | 257 | Novice | [Rishabh SINGH](https://itra.run/RunnerSpace/6869041) | 413 | male | India | M20-24 | None | matched |
 | - | no profile | - | Levan NANOBASHVILI | 414 | male | - | M45-49 | - | no_profile |
 | - | no profile | - | Abdelrahim AYOUB | 427 | male | - | M30-34 | - | no_profile |
 | - | no profile | - | Abdur Rahman MOHAMED | 428 | male | - | M20-24 | - | no_profile |
@@ -140,6 +142,7 @@
 | - | n/a | - | Ramaz OBOLADZE | 544 | male | - | M40-44 | - | name_mismatch |
 | - | no profile | - | Aleksandre LORIA | 546 | male | - | M15-19 | - | no_profile |
 | - | n/a | - | Alonso DIAZ | 548 | male | - | M55-59 | - | name_mismatch |
+| - | no profile | - | Camille PRIEUR DE LA COMBLE | 551 | male | - | M30-34 | - | no_profile |
 | - | no profile | - | Nikoloz MEGRELISHVILI | 552 | male | - | M20-24 | Idk | no_profile |
 | - | no profile | - | Denis BANDUROV | 554 | male | - | M30-34 | Fun Run Batumi | no_profile |
 | - | no profile | - | Giorgi KHVEDELIDZE | 556 | male | - | M30-34 | - | no_profile |
