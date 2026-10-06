@@ -77,6 +77,18 @@ PYTHONPATH=src python -m trail_rating_builder.cli 'https://my4.raceresult.com/41
   --gender male
 ```
 
+RaceResult events can publish a tab labeled "Participants" under a different path, such as `/results`. The source discovers that tab automatically when `/participants` is unavailable. An explicit tab URL is also supported.
+
+For Lisi Trail Festival:
+
+```bash
+PYTHONPATH=src python -m trail_rating_builder.cli 'https://my1.raceresult.com/427872/' \
+  --source raceresult \
+  --provider itra \
+  --contest 'ULTRA 62' \
+  --gender male
+```
+
 With `.env` configured, this is enough:
 
 ```bash

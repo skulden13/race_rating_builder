@@ -1,8 +1,10 @@
 import unittest
+from unittest.mock import Mock, patch
 
 from trail_rating_builder.sources.raceresult import (
     flatten_raceresult_data,
     flatten_raceresult_groups,
+    fetch_raceresult_participants,
     get_raceresult_event_id,
     get_raceresult_host,
     parse_raceresult_row,
@@ -12,6 +14,117 @@ from trail_rating_builder.sources.raceresult import (
     split_raceresult_name,
 )
 from trail_rating_builder.text import age_group_number, canonical_gender
+
+
+class RaceResultFetchTests(unittest.TestCase):
+    def response(self, payload=None, text="", status_code=200):
+        response = Mock()
+        response.json.return_value = payload
+        response.text = text
+        response.status_code = status_code
+        return response
+
+    def config(self):
+        return {
+            "key": "test-key",
+            "eventname": "Test Trail Festival",
+            "server": "my1.raceresult.com",
+            "TabConfig": {"Lists": [{"Name": "Online|Participants", "Contest": "0", "Leader": 10}]},
+        }
+
+    def participant_list(self):
+        return {"data": {"#1_ULTRA 62": [["101", "3", "Bib 101", "SMITH, Will", "USA", "M35-39", "Bad Boys"]]}}
+
+    @patch("trail_rating_builder.sources.raceresult.requests.Session")
+    def test_existing_participants_endpoint_requires_no_discovery(self, session_class):
+        session = session_class.return_value
+        session.get.side_effect = [self.response(self.config()), self.response(self.participant_list())]
+
+        name, participants = fetch_raceresult_participants("https://my1.raceresult.com/427872/")
+
+        self.assertEqual(name, "Test Trail Festival")
+        self.assertEqual(participants[0].first_name, "Will")
+        self.assertEqual(session.get.call_count, 2)
+        self.assertEqual(session.get.call_args.args[0], "https://my1.raceresult.com/427872/participants/list")
+        self.assertEqual(session.get.call_args.kwargs["params"]["page"], "participants")
+
+    @patch("trail_rating_builder.sources.raceresult.requests.Session")
+    def test_discovers_results_tab_and_uses_it_for_filtered_lists(self, session_class):
+        session = session_class.return_value
+        session.get.side_effect = [
+            self.response({"error": "tab not found: participants"}),
+            self.response(text='<a href="/999/results">Participants</a><a href="/427872/results"><span>Participants</span></a>'),
+            self.response(self.config()),
+            self.response({"groupFilters": [{"Type": 1, "Values": ["ULTRA 62"]}]}),
+            self.response(self.participant_list()),
+        ]
+
+        _, participants = fetch_raceresult_participants("https://my1.raceresult.com/427872/")
+
+        self.assertEqual(len(participants), 1)
+        self.assertEqual(participants[0].contest, "ULTRA 62")
+        calls = session.get.call_args_list
+        self.assertEqual(calls[2].args[0], "https://my1.raceresult.com/427872/results/config")
+        for call in calls[3:]:
+            self.assertEqual(call.args[0], "https://my1.raceresult.com/427872/results/list")
+            self.assertEqual(call.kwargs["params"]["page"], "results")
+        self.assertEqual(calls[4].kwargs["params"]["f"], "ULTRA 62\f\f<Ignore>")
+
+    @patch("trail_rating_builder.sources.raceresult.requests.Session")
+    def test_discovers_participant_tab_after_http_404(self, session_class):
+        missing = self.response(text="Not Found", status_code=404)
+        missing.json.side_effect = ValueError("Not JSON")
+        missing.raise_for_status.side_effect = RuntimeError("404")
+        session_class.return_value.get.side_effect = [
+            missing,
+            self.response(text='<a href="results">Participants</a>'),
+            self.response(self.config()),
+            self.response(self.participant_list()),
+        ]
+
+        _, participants = fetch_raceresult_participants("https://my1.raceresult.com/427872/")
+
+        self.assertEqual(len(participants), 1)
+        missing.json.assert_not_called()
+
+    @patch("trail_rating_builder.sources.raceresult.requests.Session")
+    def test_accepts_explicit_results_url(self, session_class):
+        session = session_class.return_value
+        session.get.side_effect = [self.response(self.config()), self.response(self.participant_list())]
+
+        _, participants = fetch_raceresult_participants("https://my1.raceresult.com/427872/results")
+
+        self.assertEqual(len(participants), 1)
+        self.assertEqual(session.get.call_args_list[0].args[0], "https://my1.raceresult.com/427872/results/config")
+        self.assertEqual(session.get.call_args.kwargs["params"]["page"], "results")
+
+    @patch("trail_rating_builder.sources.raceresult.requests.Session")
+    def test_reports_missing_participant_tab(self, session_class):
+        session_class.return_value.get.side_effect = [
+            self.response({"error": "tab not found: participants"}),
+            self.response(text='<a href="/427872/contact">Contact</a>'),
+        ]
+
+        with self.assertRaisesRegex(ValueError, "Could not find.*Participants tab"):
+            fetch_raceresult_participants("https://my1.raceresult.com/427872/")
+
+    @patch("trail_rating_builder.sources.raceresult.requests.Session")
+    def test_reports_configuration_errors_without_discovery(self, session_class):
+        session = session_class.return_value
+        session.get.return_value = self.response({"error": "Event unavailable"})
+
+        with self.assertRaisesRegex(ValueError, "Event unavailable"):
+            fetch_raceresult_participants("https://my1.raceresult.com/427872/")
+        self.assertEqual(session.get.call_count, 1)
+
+    @patch("trail_rating_builder.sources.raceresult.requests.Session")
+    def test_reports_empty_published_lists(self, session_class):
+        config = self.config()
+        config["TabConfig"]["Lists"] = []
+        session_class.return_value.get.return_value = self.response(config)
+
+        with self.assertRaisesRegex(ValueError, "No published RaceResult lists"):
+            fetch_raceresult_participants("https://my1.raceresult.com/427872/")
 
 
 class RaceResultParserTests(unittest.TestCase):

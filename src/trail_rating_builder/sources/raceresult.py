@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import re
+from html.parser import HTMLParser
 from typing import Any, Iterable
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 import certifi
 import requests
@@ -46,6 +47,32 @@ def get_raceresult_event_id(url: str) -> str:
 def get_raceresult_host(url: str) -> str:
     parsed = urlparse(url)
     return parsed.netloc or "my.raceresult.com"
+
+
+class RaceResultTabParser(HTMLParser):
+    def __init__(self, event_id: str):
+        super().__init__()
+        self.event_id = event_id
+        self.participant_tab = ""
+        self.href = ""
+        self.label: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag == "a":
+            self.href = dict(attrs).get("href") or ""
+            self.label = []
+
+    def handle_data(self, data: str) -> None:
+        if self.href:
+            self.label.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "a":
+            path = urlparse(urljoin(f"https://my.raceresult.com/{self.event_id}/", self.href)).path
+            match = re.fullmatch(rf"/{self.event_id}/([^/]+)/?", path)
+            if match and clean_text("".join(self.label)).casefold() == "participants":
+                self.participant_tab = match.group(1)
+            self.href = ""
 
 
 def flatten_raceresult_data(data: Any) -> Iterable[tuple[str, list[list[Any]]]]:
@@ -147,11 +174,12 @@ def fetch_raceresult_list(
     contest: str,
     verify: bool | str,
     filter_value: str = "",
+    page: str = "participants",
 ) -> dict[str, Any]:
     params = {
         "key": key,
         "listname": list_config["Name"],
-        "page": "participants",
+        "page": page,
         "contest": contest,
         "r": "all",
         "l": list_config.get("Leader", 999999),
@@ -172,18 +200,40 @@ def fetch_raceresult_participants(url: str, insecure: bool = False) -> tuple[str
     session = requests.Session()
     session.headers.update({"User-Agent": USER_AGENT})
     verify: bool | str = False if insecure else certifi.where()
-    base = f"https://{host}/{event_id}/participants"
+    event_base = f"https://{host}/{event_id}"
+    path_parts = urlparse(url).path.strip("/").split("/")
+    page = path_parts[1] if len(path_parts) > 1 else "participants"
+    base = f"{event_base}/{page}"
 
     config = session.get(f"{base}/config", params={"lang": "en"}, timeout=30, verify=verify)
-    config.raise_for_status()
-    config_json = config.json()
+    if config.status_code == 404:
+        config_json = {"error": f"tab not found: {page}"}
+    else:
+        config.raise_for_status()
+        config_json = config.json()
+    if config_json.get("error") == f"tab not found: {page}":
+        event_page = session.get(f"{event_base}/", timeout=30, verify=verify)
+        event_page.raise_for_status()
+        parser = RaceResultTabParser(event_id)
+        parser.feed(event_page.text)
+        if not parser.participant_tab:
+            raise ValueError(f"Could not find a RaceResult Participants tab for event {event_id}.")
+        page = parser.participant_tab
+        config = session.get(f"{event_base}/{page}/config", params={"lang": "en"}, timeout=30, verify=verify)
+        config.raise_for_status()
+        config_json = config.json()
+    if config_json.get("error"):
+        raise ValueError(f"RaceResult configuration error: {config_json['error']}")
     event_name = clean_text(config_json.get("eventname")) or f"RaceResult {event_id}"
     server = config_json.get("server") or "my.raceresult.com"
-    list_config = (config_json.get("TabConfig", {}).get("Lists") or [])[0]
+    lists = config_json.get("TabConfig", {}).get("Lists") or []
+    if not lists:
+        raise ValueError(f"No published RaceResult lists found for event {event_id} on tab {page}.")
+    list_config = lists[0]
     contest = list_config.get("Contest", "0")
 
-    list_url = f"https://{server}/{event_id}/participants/list"
-    list_json = fetch_raceresult_list(session, list_url, config_json["key"], list_config, contest, verify)
+    list_url = f"https://{server}/{event_id}/{page}/list"
+    list_json = fetch_raceresult_list(session, list_url, config_json["key"], list_config, contest, verify, page=page)
     contest_filters = raceresult_contest_filters(list_json)
     if contest_filters:
         participants = []
@@ -196,6 +246,7 @@ def fetch_raceresult_participants(url: str, insecure: bool = False) -> tuple[str
                 contest,
                 verify,
                 contest_filter,
+                page=page,
             )
             participants.extend(parse_raceresult_participants(filtered_json))
     else:
